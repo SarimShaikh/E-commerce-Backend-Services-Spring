@@ -59,9 +59,6 @@ public class UserService {
         String jwt = jwtProvider.generateJwtToken(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-
         return ResponseEntity.ok(new JwtResponse(jwt,userId, userDetails.getUsername(), userDetails.getAuthorities()));
     }
 

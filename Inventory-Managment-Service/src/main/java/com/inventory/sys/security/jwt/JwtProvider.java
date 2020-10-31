@@ -1,15 +1,16 @@
-package com.usermangment.auth.security.jwt;
+package com.inventory.sys.security.jwt;
 
-import com.usermangment.auth.security.services.UserPrinciple;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,21 +24,6 @@ public class JwtProvider {
     @Value("${e-commerce.app.jwtExpiration}")
     private int jwtExpiration;
 
-    public String generateJwtToken(Authentication authentication) {
-
-        UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
-        final String authorities = userPrincipal.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-          logger.info("-----------> "+authorities);
-        return Jwts.builder()
-		                .setSubject((userPrincipal.getUsername()))
-                        .claim("AUTHORITIES_KEY",authorities)
-		                .setIssuedAt(new Date())
-		                .setExpiration(new Date((new Date()).getTime() + jwtExpiration*1000))
-		                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-		                .compact();
-    }
     
     public boolean validateJwtToken(String authToken) {
         try {
@@ -65,4 +51,16 @@ public class JwtProvider {
 			                .getBody().getSubject();
     }
 
+    public Collection<? extends GrantedAuthority> getAuthorities(String token){
+
+        final JwtParser jwtParser = Jwts.parser().setSigningKey(jwtSecret);
+        final Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
+        final Claims claims = claimsJws.getBody();
+
+        final Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get("AUTHORITIES_KEY").toString().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+        return authorities;
+    }
 }
