@@ -18,7 +18,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 
-@RestController @CrossOrigin(origins = "http://localhost:4200")
+@RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/v1/auth")
 public class UserController {
 
