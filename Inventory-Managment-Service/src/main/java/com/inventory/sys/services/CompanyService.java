@@ -57,7 +57,7 @@ public class CompanyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + companyId));
         companyRepository.delete(company);
         customResponseDto.setResponseCode("200");
-        customResponseDto.setResponseCode("Company Deleted");
+        customResponseDto.setMessage("Company Deleted");
         return customResponseDto;
     }
 

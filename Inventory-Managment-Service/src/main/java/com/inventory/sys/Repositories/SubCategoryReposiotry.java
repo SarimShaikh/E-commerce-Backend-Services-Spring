@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SubCategoryReposiotry extends JpaRepository<SubCategory,Long> {
-
+    boolean existsBySubCategoryType(String subCategoryType);
+    void deleteAllByCategoryId(Long categoryId);
 }

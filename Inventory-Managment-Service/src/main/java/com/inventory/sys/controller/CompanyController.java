@@ -28,19 +28,19 @@ public class CompanyController {
         return companyService.addCompany(company);
     }
 
-    @PutMapping("update-company")
+    @PutMapping("/update-company")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public CustomResponseDto updateCompany(@RequestBody Company company) throws ResourceNotFoundException {
         return companyService.updateCompany(company);
     }
 
-    @DeleteMapping("delete-company")
+    @DeleteMapping("/delete-company/{companyId}")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public CustomResponseDto deleteCompany(@PathVariable(value = "companyId") Long companyId) throws ResourceNotFoundException {
         return companyService.deleteCompany(companyId);
     }
 
-    @GetMapping("get-companies")
+    @GetMapping("/get-companies")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public List<Company> getAllCompanies(){
         return companyService.getAllCompanies();

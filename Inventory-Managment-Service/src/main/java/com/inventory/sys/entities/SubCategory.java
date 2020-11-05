@@ -16,7 +16,7 @@ public class SubCategory extends EntityBase<String> implements Serializable {
     private Long categoryId;
     private String subCategoryType;
     private Category category;
-    private Byte isAvtive;
+    private Byte isActive;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,11 +62,11 @@ public class SubCategory extends EntityBase<String> implements Serializable {
 
     @Basic
     @Column(name = "ACTIVE", nullable = false)
-    public Byte getIsAvtive() {
-        return isAvtive;
+    public Byte getIsActive() {
+        return isActive;
     }
 
-    public void setIsAvtive(Byte isAvtive) {
-        this.isAvtive = isAvtive;
+    public void setIsActive(Byte isActive) {
+        this.isActive = isActive;
     }
 }

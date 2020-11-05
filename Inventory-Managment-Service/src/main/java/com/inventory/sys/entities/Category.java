@@ -45,11 +45,10 @@ public class Category extends EntityBase<String> implements Serializable {
     }
 
     public void setIsActive(Byte isActive) {
-        this.isActive = isActive;
+        this.isActive =  isActive;
     }
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
     public Collection<SubCategory> getSubCategories() {
         return subCategories;
     }
