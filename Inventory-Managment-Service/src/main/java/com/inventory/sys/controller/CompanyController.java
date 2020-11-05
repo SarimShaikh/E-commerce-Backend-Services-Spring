@@ -31,7 +31,8 @@ public class CompanyController {
     @PutMapping("/update-company")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public CustomResponseDto updateCompany(@RequestBody Company company) throws ResourceNotFoundException {
-        return companyService.updateCompany(company);
+        Long companyId = company.getCompanyId();
+        return companyService.updateCompany(companyId,company);
     }
 
     @DeleteMapping("/delete-company/{companyId}")

@@ -33,15 +33,15 @@ public class CompanyService {
         return customResponseDto;
     }
 
-    public CustomResponseDto updateCompany(Company companyReq)throws ResourceNotFoundException {
+    public CustomResponseDto updateCompany(Long companyId, Company companyReq)throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
-        Company company = companyRepository.findById(companyReq.getCompanyId())
+        Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + companyReq.getCompanyId()));
         company.setCompanyId(companyReq.getCompanyId());
         company.setCompanyName(companyReq.getCompanyName());
         company.setCompanyEmail(companyReq.getCompanyEmail());
         company.setCompanyContact(companyReq.getCompanyContact());
-        company.setIsActive((byte)1);
+        company.setIsActive(companyReq.getIsActive());
 
         final Company updatedCompany = companyRepository.save(company);
 
