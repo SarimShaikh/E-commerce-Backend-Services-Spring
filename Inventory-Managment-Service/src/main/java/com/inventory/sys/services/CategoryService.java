@@ -77,11 +77,13 @@ public class CategoryService {
         category.setCategoryType(requestDto.getCategoryType());
         categoryRepository.save(category);
 
-        for(SubCategory subCategory : requestDto.getSubCategories()){
-            SubCategory subCategory1 = subCategoryReposiotry.findById(subCategory.getSubCategoryId()).
-                    orElseThrow(() -> new ResourceNotFoundException("Sub-Category not found for this id :: " + requestDto.getCategoryId()));
-            subCategory1.setSubCategoryType(subCategory.getSubCategoryType());
-            subCategoryReposiotry.save(subCategory1);
+        if(!requestDto.getSubCategories().isEmpty()) {
+            for (SubCategory subCategory : requestDto.getSubCategories()) {
+                SubCategory subCategory1 = subCategoryReposiotry.findById(subCategory.getSubCategoryId()).
+                        orElseThrow(() -> new ResourceNotFoundException("Sub-Category not found for this id :: " + requestDto.getCategoryId()));
+                subCategory1.setSubCategoryType(subCategory.getSubCategoryType());
+                subCategoryReposiotry.save(subCategory1);
+            }
         }
 
         customResponseDto.setResponseCode("200");
