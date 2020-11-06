@@ -75,11 +75,11 @@ public class CategoryService {
                 orElseThrow(() -> new ResourceNotFoundException("Category not found for this id :: " + categoryRequestDto.getCategoryId()));
 
         category.setCategoryType(categoryRequestDto.getCategoryType());
-        categoryRepository.save(category);
+        final Category updatedCategory = categoryRepository.save(category);
 
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Category updated successfully");
-        customResponseDto.setEntityClass(category);
+        customResponseDto.setEntityClass(updatedCategory);
         return customResponseDto;
     }
 
