@@ -41,6 +41,12 @@ public class CategoryController {
         return categoryService.updateCategory(requestDto);
     }
 
+    @PutMapping("/update-Subcategory")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public CustomResponseDto updateSubCategory(@RequestBody RequestDto requestDto) throws ResourceNotFoundException {
+        return categoryService.updateSubCategories(requestDto);
+    }
+
     @DeleteMapping("/delete-category/{categoryId}")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public CustomResponseDto deleteCategory(@PathVariable(value = "categoryId") Long categoryId) throws ResourceNotFoundException {

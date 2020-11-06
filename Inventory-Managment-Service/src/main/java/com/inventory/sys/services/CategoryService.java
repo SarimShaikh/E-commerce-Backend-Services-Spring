@@ -77,6 +77,14 @@ public class CategoryService {
         category.setCategoryType(requestDto.getCategoryType());
         categoryRepository.save(category);
 
+        customResponseDto.setResponseCode("200");
+        customResponseDto.setMessage("Category updated successfully");
+        customResponseDto.setEntityClass(category);
+        return customResponseDto;
+    }
+
+    public CustomResponseDto updateSubCategories(RequestDto requestDto) throws ResourceNotFoundException {
+        CustomResponseDto customResponseDto = new CustomResponseDto();
         if(!requestDto.getSubCategories().isEmpty()) {
             for (SubCategory subCategory : requestDto.getSubCategories()) {
                 SubCategory subCategory1 = subCategoryReposiotry.findById(subCategory.getSubCategoryId()).
@@ -85,10 +93,8 @@ public class CategoryService {
                 subCategoryReposiotry.save(subCategory1);
             }
         }
-
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Category updated successfully");
-        customResponseDto.setEntityClass(category);
         return customResponseDto;
     }
 
