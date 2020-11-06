@@ -2,9 +2,10 @@ package com.inventory.sys.messageDto;
 
 import com.inventory.sys.entities.SubCategory;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public class RequestDto {
+public class CategoryRequestDTO implements Serializable {
 
     private Long categoryId;
     private String categoryType;
@@ -33,4 +34,5 @@ public class RequestDto {
     public void setSubCategories(Collection<SubCategory> subCategories) {
         this.subCategories = subCategories;
     }
+
 }

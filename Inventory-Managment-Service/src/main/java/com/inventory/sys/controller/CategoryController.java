@@ -3,7 +3,7 @@ package com.inventory.sys.controller;
 import com.inventory.sys.entities.Category;
 import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
-import com.inventory.sys.messageDto.RequestDto;
+import com.inventory.sys.messageDto.CategoryRequestDTO;
 import com.inventory.sys.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,14 +37,15 @@ public class CategoryController {
 
     @PutMapping("/update-category")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public CustomResponseDto updateCategory(@RequestBody RequestDto requestDto) throws ResourceNotFoundException {
-        return categoryService.updateCategory(requestDto);
+    public CustomResponseDto updateCategory(@RequestBody CategoryRequestDTO categoryRequestDto) throws ResourceNotFoundException {
+        Long categoryId = categoryRequestDto.getCategoryId();
+        return categoryService.updateCategory(categoryId,categoryRequestDto);
     }
 
     @PutMapping("/update-Subcategory")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public CustomResponseDto updateSubCategory(@RequestBody RequestDto requestDto) throws ResourceNotFoundException {
-        return categoryService.updateSubCategories(requestDto);
+    public CustomResponseDto updateSubCategory(@RequestBody CategoryRequestDTO categoryRequestDto) throws ResourceNotFoundException {
+        return categoryService.updateSubCategories(categoryRequestDto);
     }
 
     @DeleteMapping("/delete-category/{categoryId}")

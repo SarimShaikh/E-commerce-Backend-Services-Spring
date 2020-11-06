@@ -6,7 +6,7 @@ import com.inventory.sys.entities.Category;
 import com.inventory.sys.entities.SubCategory;
 import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
-import com.inventory.sys.messageDto.RequestDto;
+import com.inventory.sys.messageDto.CategoryRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,12 +69,12 @@ public class CategoryService {
     }
 
     @Transactional
-    public CustomResponseDto updateCategory(RequestDto requestDto) throws ResourceNotFoundException {
+    public CustomResponseDto updateCategory(Long categoryId, CategoryRequestDTO categoryRequestDto) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
-        Category category = categoryRepository.findById(requestDto.getCategoryId()).
-                orElseThrow(() -> new ResourceNotFoundException("Category not found for this id :: " + requestDto.getCategoryId()));
+        Category category = categoryRepository.findById(categoryId).
+                orElseThrow(() -> new ResourceNotFoundException("Category not found for this id :: " + categoryRequestDto.getCategoryId()));
 
-        category.setCategoryType(requestDto.getCategoryType());
+        category.setCategoryType(categoryRequestDto.getCategoryType());
         categoryRepository.save(category);
 
         customResponseDto.setResponseCode("200");
@@ -83,12 +83,12 @@ public class CategoryService {
         return customResponseDto;
     }
 
-    public CustomResponseDto updateSubCategories(RequestDto requestDto) throws ResourceNotFoundException {
+    public CustomResponseDto updateSubCategories(CategoryRequestDTO categoryRequestDto) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
-        if(!requestDto.getSubCategories().isEmpty()) {
-            for (SubCategory subCategory : requestDto.getSubCategories()) {
+        if(!categoryRequestDto.getSubCategories().isEmpty()) {
+            for (SubCategory subCategory : categoryRequestDto.getSubCategories()) {
                 SubCategory subCategory1 = subCategoryReposiotry.findById(subCategory.getSubCategoryId()).
-                        orElseThrow(() -> new ResourceNotFoundException("Sub-Category not found for this id :: " + requestDto.getCategoryId()));
+                        orElseThrow(() -> new ResourceNotFoundException("Sub-Category not found for this id :: " + categoryRequestDto.getCategoryId()));
                 subCategory1.setSubCategoryType(subCategory.getSubCategoryType());
                 subCategoryReposiotry.save(subCategory1);
             }
