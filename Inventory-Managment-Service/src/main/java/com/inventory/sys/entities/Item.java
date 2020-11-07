@@ -26,6 +26,11 @@ public class Item extends EntityBase<String> implements Serializable {
     Collection<ItemDetails> itemDetails;
     private Byte isActive;
 
+    //extra fields to get parent details
+    private String companyName;
+    private String categoryName;
+    private String subCategoryName;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ITEM_ID", nullable = false)
@@ -138,4 +143,28 @@ public class Item extends EntityBase<String> implements Serializable {
         this.itemDetails = itemDetails;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public String getSubCategoryName() {
+        return subCategoryName;
+    }
+
+    //set values in extra fields
+    public void setCompanyName(String companyName) {
+        this.companyName = company.getCompanyName();
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = category.getCategoryType();
+    }
+
+    public void setSubCategoryName(String subCategoryName) {
+        this.subCategoryName = subCategory.getSubCategoryType();
+    }
 }
