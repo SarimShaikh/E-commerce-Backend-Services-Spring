@@ -78,7 +78,7 @@ public class ItemController {
         return itemService.deleteItemWithDetails(itemId);
     }
 
-    @DeleteMapping("/delete-itemWithDetails/{itemDetailId}")
+    @DeleteMapping("/delete-item-Details/{itemDetailId}")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public CustomResponseDto deleteItemDetails(@PathVariable(value = "itemDetailId") Long itemDetailId) throws ResourceNotFoundException {
         return itemService.deleteItemDetail(itemDetailId);
