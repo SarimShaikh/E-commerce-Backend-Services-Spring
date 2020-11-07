@@ -1,9 +1,11 @@
 package com.inventory.sys.services;
 
 import com.inventory.sys.Repositories.ImagesRepository;
+import com.inventory.sys.Repositories.InventoryDetailRepository;
 import com.inventory.sys.Repositories.ItemDetailsRepository;
 import com.inventory.sys.Repositories.ItemRepository;
 import com.inventory.sys.entities.Images;
+import com.inventory.sys.entities.InventoryDetail;
 import com.inventory.sys.entities.Item;
 import com.inventory.sys.entities.ItemDetails;
 import com.inventory.sys.exceptions.CustomResponseDto;
@@ -28,12 +30,14 @@ public class ItemService {
     private ItemRepository itemRepository;
     private ImagesRepository imagesRepository;
     private ItemDetailsRepository itemDetailsRepository;
-
+    private InventoryDetailRepository inventoryDetailRepository;
     @Autowired
-    public ItemService(ItemRepository itemRepository , ImagesRepository imagesRepository , ItemDetailsRepository itemDetailsRepository) {
+    public ItemService(ItemRepository itemRepository , ImagesRepository imagesRepository , ItemDetailsRepository itemDetailsRepository, InventoryDetailRepository inventoryDetailRepository) {
         this.itemRepository = itemRepository;
         this.imagesRepository = imagesRepository;
         this.itemDetailsRepository = itemDetailsRepository;
+        this.inventoryDetailRepository = inventoryDetailRepository;
+
     }
 
     private final Path root = Paths.get("D://java-projects//e-commerce-backend-services//Inventory-Managment-Service//upload-images");
@@ -78,6 +82,7 @@ public class ItemService {
         return customResponseDto;
     }
 
+    @Transactional
     public CustomResponseDto addItemDetail(ItemRequestDTO itemRequestDTO) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
 
@@ -93,6 +98,8 @@ public class ItemService {
             itemDetails1.setRentalDays(itemDetails.getRentalDays());
             itemDetails1.setIsActive((byte)1);
             itemDetailsRepository.save(itemDetails1);
+            itemDetailsRepository.flush();
+            inventoryDetailRepository.save(new InventoryDetail(item.getItemId(),itemDetails1.getItemDetailId(),(long)0,(byte)1));
         }
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Item Details added successfully");

@@ -17,6 +17,16 @@ public class InventoryDetail extends EntityBase<String> implements Serializable 
     private Long availQuantity;
     private Byte isActive;
 
+    public InventoryDetail(){
+    }
+
+    public InventoryDetail(Long itemId, Long itemDetailId, Long availQuantity, Byte isActive) {
+        this.itemId = itemId;
+        this.itemDetailId = itemDetailId;
+        this.availQuantity = availQuantity;
+        this.isActive=isActive;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "INVENTORY_ID", nullable = false)

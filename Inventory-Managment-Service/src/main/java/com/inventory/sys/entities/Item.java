@@ -1,6 +1,7 @@
 package com.inventory.sys.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.inventory.sys.entities.audit.EntityBase;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -18,6 +19,7 @@ public class Item extends EntityBase<String> implements Serializable {
     private Long categoryId;
     private Long subCategoryId;
     private String itemName;
+    private Company company;
     private Category category;
     private SubCategory subCategory;
     Collection<Images> images;
@@ -75,7 +77,18 @@ public class Item extends EntityBase<String> implements Serializable {
         this.itemName = itemName;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "COMPANY_ID" ,nullable = false , insertable = false , updatable = false)
+    @JsonIgnore
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonBackReference
     public Category getCategory() {
@@ -86,7 +99,7 @@ public class Item extends EntityBase<String> implements Serializable {
         this.category = category;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     @JoinColumn(name = "SUB_CATEGORY_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonBackReference
     public SubCategory getSubCategory() {
@@ -124,4 +137,5 @@ public class Item extends EntityBase<String> implements Serializable {
     public void setItemDetails(Collection<ItemDetails> itemDetails) {
         this.itemDetails = itemDetails;
     }
+
 }
