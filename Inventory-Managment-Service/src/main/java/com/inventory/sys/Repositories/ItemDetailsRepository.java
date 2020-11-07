@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemDetailsRepository  extends JpaRepository<ItemDetails,Long> {
-
+    void deleteAllByItemId(Long itemId);
 }

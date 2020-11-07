@@ -1,6 +1,7 @@
 package com.inventory.sys.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.inventory.sys.entities.audit.EntityBase;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -95,7 +96,7 @@ public class ItemDetails extends EntityBase<String> implements Serializable {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ITEM_ID" ,nullable = false , insertable = false , updatable = false)
-    @JsonManagedReference
+    @JsonIgnore
     public Item getItem() {
         return item;
     }

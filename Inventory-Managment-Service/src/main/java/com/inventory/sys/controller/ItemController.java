@@ -1,5 +1,6 @@
 package com.inventory.sys.controller;
 
+import com.inventory.sys.entities.Item;
 import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.exceptions.ResponseMessage;
@@ -57,5 +58,35 @@ public class ItemController {
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public CustomResponseDto addItemDetails(@RequestBody ItemRequestDTO itemRequestDTO) throws ResourceNotFoundException {
         return itemService.addItemDetail(itemRequestDTO);
+    }
+
+    @PutMapping("/update-item")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public CustomResponseDto updateItem(@RequestBody ItemRequestDTO itemRequestDTO) throws ResourceNotFoundException {
+        return itemService.updateItem(itemRequestDTO);
+    }
+
+    @PutMapping("/update-item-details")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public CustomResponseDto updateItemDetails(@RequestBody ItemRequestDTO itemRequestDTO) throws ResourceNotFoundException {
+        return itemService.updateItemDetail(itemRequestDTO);
+    }
+
+    @DeleteMapping("/delete-itemAndDetail/{itemId}")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public CustomResponseDto deleteItemWithDetails(@PathVariable(value = "itemId") Long itemId) throws ResourceNotFoundException {
+        return itemService.deleteItemWithDetails(itemId);
+    }
+
+    @DeleteMapping("/delete-itemWithDetails/{itemDetailId}")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public CustomResponseDto deleteItemDetails(@PathVariable(value = "itemDetailId") Long itemDetailId) throws ResourceNotFoundException {
+        return itemService.deleteItemDetail(itemDetailId);
+    }
+
+    @GetMapping("/get-items")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public List<Item> getAllItems(){
+        return itemService.getAllItems();
     }
 }

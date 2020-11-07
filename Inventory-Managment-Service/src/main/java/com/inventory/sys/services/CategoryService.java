@@ -92,9 +92,9 @@ public class CategoryService {
                 subCategory1.setSubCategoryType(subCategory.getSubCategoryType());
                 subCategoryReposiotry.save(subCategory1);
             }
+            customResponseDto.setResponseCode("200");
+            customResponseDto.setMessage("Category updated successfully");
         }
-        customResponseDto.setResponseCode("200");
-        customResponseDto.setMessage("Category updated successfully");
         return customResponseDto;
     }
 
