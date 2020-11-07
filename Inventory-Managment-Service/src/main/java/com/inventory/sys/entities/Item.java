@@ -82,7 +82,7 @@ public class Item extends EntityBase<String> implements Serializable {
         this.itemName = itemName;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "COMPANY_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonIgnore
     public Company getCompany() {
@@ -93,7 +93,7 @@ public class Item extends EntityBase<String> implements Serializable {
         this.company = company;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CATEGORY_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonBackReference
     public Category getCategory() {
@@ -104,7 +104,7 @@ public class Item extends EntityBase<String> implements Serializable {
         this.category = category;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SUB_CATEGORY_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonBackReference
     public SubCategory getSubCategory() {
