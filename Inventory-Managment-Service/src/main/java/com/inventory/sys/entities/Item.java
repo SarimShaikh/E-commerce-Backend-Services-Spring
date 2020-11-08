@@ -143,14 +143,17 @@ public class Item extends EntityBase<String> implements Serializable {
         this.itemDetails = itemDetails;
     }
 
+    @org.springframework.data.annotation.Transient
     public String getCompanyName() {
         return companyName;
     }
 
+    @org.springframework.data.annotation.Transient
     public String getCategoryName() {
         return categoryName;
     }
 
+    @org.springframework.data.annotation.Transient
     public String getSubCategoryName() {
         return subCategoryName;
     }

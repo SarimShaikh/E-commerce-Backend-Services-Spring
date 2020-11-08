@@ -1,7 +1,11 @@
 package com.inventory.sys.services;
 
 import com.inventory.sys.Repositories.InventoryDetailRepository;
+import com.inventory.sys.entities.InventoryDetail;
+import com.inventory.sys.exceptions.CustomResponseDto;
+import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.messageDto.InventoryDTO;
+import com.inventory.sys.messageDto.ItemRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +42,18 @@ public class InventoryDetailService {
             inventoryDTOList.add(inventoryDTO);
         }
         return  inventoryDTOList;
+    }
+
+    public CustomResponseDto updateInventory(InventoryDTO inventoryDTO) throws ResourceNotFoundException {
+        CustomResponseDto customResponseDto = new CustomResponseDto();
+        InventoryDetail inventoryDetail = inventoryDetailRepository.findById(inventoryDTO.getInventoryId()).
+                orElseThrow(() -> new ResourceNotFoundException("Inventory record not found for this id :: " + inventoryDTO.getInventoryId()));
+
+        inventoryDetail.setAvailQuantity(inventoryDTO.getAvailableQuan());
+        final InventoryDetail inventoryDetail1 = inventoryDetailRepository.save(inventoryDetail);
+        customResponseDto.setResponseCode("200");
+        customResponseDto.setMessage("Inventory Updated successfully");
+        customResponseDto.setEntityClass(inventoryDetail1);
+        return customResponseDto;
     }
 }

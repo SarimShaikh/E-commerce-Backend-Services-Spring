@@ -1,13 +1,12 @@
 package com.inventory.sys.controller;
 
+import com.inventory.sys.exceptions.CustomResponseDto;
+import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.messageDto.InventoryDTO;
 import com.inventory.sys.services.InventoryDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +26,11 @@ public class InventoryDetailController {
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public List<InventoryDTO> getAllInventoryItems(){
         return inventoryDetailService.getAllItemsInventory();
+    }
+
+    @PutMapping("/update-inventory")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public CustomResponseDto updateInventoryDetail(@RequestBody InventoryDTO inventoryDTO) throws ResourceNotFoundException {
+        return inventoryDetailService.updateInventory(inventoryDTO);
     }
 }
