@@ -17,4 +17,6 @@ public interface InventoryDetailRepository extends JpaRepository<InventoryDetail
             "ON(item.ITEM_ID = inventory.ITEM_ID) JOIN items_detail detail\n" +
             "ON(detail.ITEM_DETAIL_ID = inventory.ITEM_DETAIL_ID)", nativeQuery = true)
     List<Map<String, Object>> getItemsInventory();
+
+    void deleteAllByItemId(Long itemId);
 }

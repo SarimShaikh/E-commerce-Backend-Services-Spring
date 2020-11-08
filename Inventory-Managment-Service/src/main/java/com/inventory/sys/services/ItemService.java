@@ -154,6 +154,7 @@ public class ItemService {
         itemRepository.delete(item);
         itemDetailsRepository.deleteAllByItemId(itemId);
         imagesRepository.deleteAllByItemId(itemId);
+        inventoryDetailRepository.deleteAllByItemId(itemId);
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Item and details Deleted");
         return customResponseDto;
