@@ -12,16 +12,19 @@ import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.messageDto.ItemDetailsDTO;
 import com.inventory.sys.messageDto.ItemRequestDTO;
+import com.inventory.sys.utils.UtilsClass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.core.env.Environment;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,15 +34,20 @@ public class ItemService {
     private ImagesRepository imagesRepository;
     private ItemDetailsRepository itemDetailsRepository;
     private InventoryDetailRepository inventoryDetailRepository;
+    private Environment env;
+
+
     @Autowired
-    public ItemService(ItemRepository itemRepository , ImagesRepository imagesRepository , ItemDetailsRepository itemDetailsRepository, InventoryDetailRepository inventoryDetailRepository) {
+    public ItemService(ItemRepository itemRepository , ImagesRepository imagesRepository , ItemDetailsRepository itemDetailsRepository, InventoryDetailRepository inventoryDetailRepository , Environment env) {
         this.itemRepository = itemRepository;
         this.imagesRepository = imagesRepository;
         this.itemDetailsRepository = itemDetailsRepository;
         this.inventoryDetailRepository = inventoryDetailRepository;
-
+        this.env =env;
     }
 
+    @Value("${images.path}")
+    String imagePath;
     private final Path root = Paths.get("D://java-projects//e-commerce-backend-services//Inventory-Managment-Service//upload-images");
 
     public void saveImages(MultipartFile file , Long itemId) {
@@ -174,4 +182,16 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
+    public List<Images> getImages() throws Exception{
+        List<Images> imagesList = new ArrayList<>();
+        List<Images> images = imagesRepository.findAll();
+        for(Images img: images){
+            Images images1 = new Images();
+            images1.setImageId(img.getImageId());
+            images1.setItemId(img.getItemId());
+            images1.setImagePath(UtilsClass.getImageUrl(img.getImagePath()));
+            imagesList.add(images1);
+        }
+        return imagesList;
+    }
 }

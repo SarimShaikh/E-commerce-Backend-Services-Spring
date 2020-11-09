@@ -1,5 +1,6 @@
 package com.inventory.sys.controller;
 
+import com.inventory.sys.entities.Images;
 import com.inventory.sys.entities.Item;
 import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
@@ -88,5 +89,11 @@ public class ItemController {
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public List<Item> getAllItems(){
         return itemService.getAllItems();
+    }
+
+    @GetMapping("/get-images")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public List<Images> getAllImages() throws Exception{
+        return itemService.getImages();
     }
 }

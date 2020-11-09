@@ -16,6 +16,7 @@ public class Images extends EntityBase<String> implements Serializable {
     private String imagePath;
     private Long itemId;
     private Item item;
+    private String encodeImage;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,5 +58,14 @@ public class Images extends EntityBase<String> implements Serializable {
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    @org.springframework.data.annotation.Transient
+    public String getEncodeImage() {
+        return encodeImage;
+    }
+
+    public void setEncodeImage(String encodeImage) {
+        this.encodeImage = encodeImage;
     }
 }
