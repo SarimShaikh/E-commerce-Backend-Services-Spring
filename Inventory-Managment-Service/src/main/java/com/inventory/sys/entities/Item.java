@@ -29,7 +29,7 @@ public class Item extends EntityBase<String> implements Serializable {
     //extra fields to get parent details
     private String companyName;
     private String categoryName;
-    private String subCategoryName;
+    //private String subCategoryName;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,7 +82,7 @@ public class Item extends EntityBase<String> implements Serializable {
         this.itemName = itemName;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(optional = false , fetch = FetchType.LAZY)
     @JoinColumn(name = "COMPANY_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonIgnore
     public Company getCompany() {
@@ -93,7 +93,7 @@ public class Item extends EntityBase<String> implements Serializable {
         this.company = company;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(optional = false , fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonBackReference
     public Category getCategory() {
@@ -104,7 +104,7 @@ public class Item extends EntityBase<String> implements Serializable {
         this.category = category;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "SUB_CATEGORY_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonBackReference
     public SubCategory getSubCategory() {
@@ -153,10 +153,10 @@ public class Item extends EntityBase<String> implements Serializable {
         return categoryName;
     }
 
-    @org.springframework.data.annotation.Transient
+    /*@org.springframework.data.annotation.Transient
     public String getSubCategoryName() {
         return subCategoryName;
-    }
+    }*/
 
     //set values in extra fields
     public void setCompanyName(String companyName) {
@@ -167,7 +167,7 @@ public class Item extends EntityBase<String> implements Serializable {
         this.categoryName = category.getCategoryType();
     }
 
-    public void setSubCategoryName(String subCategoryName) {
+    /*public void setSubCategoryName(String subCategoryName) {
         this.subCategoryName = subCategory.getSubCategoryType();
-    }
+    }*/
 }

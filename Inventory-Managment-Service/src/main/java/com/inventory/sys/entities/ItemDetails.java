@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Optional;
 
 @Entity
 @Table(name = "items_detail")
@@ -94,7 +95,7 @@ public class ItemDetails extends EntityBase<String> implements Serializable {
         this.isActive = isActive;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "ITEM_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonIgnore
     public Item getItem() {

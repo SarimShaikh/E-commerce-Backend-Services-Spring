@@ -1,6 +1,9 @@
 package com.inventory.sys.utils;
 
 import org.springframework.core.io.UrlResource;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 
 import java.nio.file.Path;
@@ -13,6 +16,7 @@ public class UtilsClass {
         Path file = root.resolve(path);
         String resource = new UrlResource(file.toUri()).toString();
         resource = resource.replaceAll("\\[", "").replaceAll("\\]","");
+
         return resource;
     }
 }

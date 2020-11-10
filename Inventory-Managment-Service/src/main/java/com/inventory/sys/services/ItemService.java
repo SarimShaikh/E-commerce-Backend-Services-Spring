@@ -14,7 +14,6 @@ import com.inventory.sys.messageDto.ItemDetailsDTO;
 import com.inventory.sys.messageDto.ItemRequestDTO;
 import com.inventory.sys.utils.UtilsClass;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -46,8 +45,6 @@ public class ItemService {
         this.env =env;
     }
 
-    @Value("${images.path}")
-    String imagePath;
     private final Path root = Paths.get("D://java-projects//e-commerce-backend-services//Inventory-Managment-Service//upload-images");
 
     public void saveImages(MultipartFile file , Long itemId) {
