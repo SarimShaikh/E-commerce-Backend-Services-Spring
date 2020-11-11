@@ -8,12 +8,21 @@ import com.inventory.sys.exceptions.ResponseMessage;
 import com.inventory.sys.messageDto.ItemRequestDTO;
 import com.inventory.sys.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +33,7 @@ import java.util.List;
 public class ItemController {
 
     private ItemService itemService;
+
     @Autowired
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
@@ -95,5 +105,36 @@ public class ItemController {
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public List<Images> getAllImages() throws Exception{
         return itemService.getImages();
+    }
+
+    @GetMapping("/downloadFile/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws Exception{
+        // Load file as Resource
+        Resource resource ;
+        try {
+            Path filePath = Paths.get( "D://java-projects//e-commerce-backend-services//Inventory-Managment-Service//upload-images//"+fileName)
+                    .toAbsolutePath().normalize();
+             resource = new UrlResource(filePath.toUri());
+
+        } catch (MalformedURLException ex) {
+            throw new MalformedURLException("File not found " + fileName);
+        }
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (Exception ex) {
+            throw new Exception("Could not determine file type.");
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }

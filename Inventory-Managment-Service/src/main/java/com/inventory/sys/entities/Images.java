@@ -9,14 +9,12 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "images")
-@EntityListeners(AuditingEntityListener.class)
-public class Images extends EntityBase<String> implements Serializable {
+public class Images implements Serializable {
 
     private Long imageId;
     private String imagePath;
     private Long itemId;
     private Item item;
-    private String encodeImage;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,12 +58,4 @@ public class Images extends EntityBase<String> implements Serializable {
         this.item = item;
     }
 
-    @org.springframework.data.annotation.Transient
-    public String getEncodeImage() {
-        return encodeImage;
-    }
-
-    public void setEncodeImage(String encodeImage) {
-        this.encodeImage = encodeImage;
-    }
 }

@@ -14,17 +14,16 @@ import com.inventory.sys.messageDto.ItemDetailsDTO;
 import com.inventory.sys.messageDto.ItemRequestDTO;
 import com.inventory.sys.utils.UtilsClass;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.core.env.Environment;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ItemService {
@@ -33,30 +32,33 @@ public class ItemService {
     private ImagesRepository imagesRepository;
     private ItemDetailsRepository itemDetailsRepository;
     private InventoryDetailRepository inventoryDetailRepository;
-    private Environment env;
-
+    private String filePath;
+    private String downloadUrl;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository , ImagesRepository imagesRepository , ItemDetailsRepository itemDetailsRepository, InventoryDetailRepository inventoryDetailRepository , Environment env) {
+    public ItemService(ItemRepository itemRepository , ImagesRepository imagesRepository , ItemDetailsRepository itemDetailsRepository,
+                       InventoryDetailRepository inventoryDetailRepository , @Value("${image.download.path}") String url , @Value("${images.path}") String imgPath) {
         this.itemRepository = itemRepository;
         this.imagesRepository = imagesRepository;
         this.itemDetailsRepository = itemDetailsRepository;
         this.inventoryDetailRepository = inventoryDetailRepository;
-        this.env =env;
+        this.downloadUrl = url;
+        this.filePath = imgPath;
     }
 
-    private final Path root = Paths.get("D://java-projects//e-commerce-backend-services//Inventory-Managment-Service//upload-images");
+
 
     public void saveImages(MultipartFile file , Long itemId) {
         try {
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
-            Path file1 = root.resolve(file.getOriginalFilename());
-            Resource resource = new UrlResource(file1.toUri());
+            final Path root = Paths.get(filePath);
+            String fileName = UUID.randomUUID().toString().replace("-", "")+
+                    UtilsClass.getExtention(file.getOriginalFilename());
+            Files.copy(file.getInputStream(), root.resolve(fileName));
 
             Images images = new Images();
             Item item = itemRepository.findById(itemId).
                     orElseThrow(() -> new ResourceNotFoundException("Item not found for this id :: " + itemId));
-            images.setImagePath(this.root.resolve(file.getOriginalFilename()).toString());
+            images.setImagePath(fileName);
 
             images.setItemId(item.getItemId());
             imagesRepository.save(images);
@@ -186,7 +188,7 @@ public class ItemService {
             Images images1 = new Images();
             images1.setImageId(img.getImageId());
             images1.setItemId(img.getItemId());
-            images1.setImagePath(UtilsClass.getImageUrl(img.getImagePath()));
+            images1.setImagePath(downloadUrl+img.getImagePath());
             imagesList.add(images1);
         }
         return imagesList;
