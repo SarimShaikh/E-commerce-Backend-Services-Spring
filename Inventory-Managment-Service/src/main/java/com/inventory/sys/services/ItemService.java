@@ -181,9 +181,10 @@ public class ItemService {
 
     public List<Item> getAllItems(){
         List<Item> items = itemRepository.findAll();
-        List<Images> imagesList = new ArrayList<>();
+        List<Images> imagesList;
         Collection<Images> images;
         for(Item item : items){
+            imagesList = new ArrayList<>();
             images = item.getImages();
             for(Images img : images){
                 Images images1 = new Images();
@@ -193,6 +194,7 @@ public class ItemService {
                 imagesList.add(images1);
             }
             item.setImages(imagesList);
+
         }
         return items;
     }
