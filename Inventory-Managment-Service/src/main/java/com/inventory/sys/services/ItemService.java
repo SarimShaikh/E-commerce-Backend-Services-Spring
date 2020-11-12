@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -177,20 +178,23 @@ public class ItemService {
         customResponseDto.setMessage("Item detail Deleted");
         return customResponseDto;
     }
+
     public List<Item> getAllItems(){
-        return itemRepository.findAll();
+        List<Item> items = itemRepository.findAll();
+        List<Images> imagesList = new ArrayList<>();
+        Collection<Images> images;
+        for(Item item : items){
+            images = item.getImages();
+            for(Images img : images){
+                Images images1 = new Images();
+                images1.setItemId(img.getItemId());
+                images1.setImageId(img.getImageId());
+                images1.setImagePath(downloadUrl+img.getImagePath());
+                imagesList.add(images1);
+            }
+            item.setImages(imagesList);
+        }
+        return items;
     }
 
-    public List<Images> getImages() throws Exception{
-        List<Images> imagesList = new ArrayList<>();
-        List<Images> images = imagesRepository.findAll();
-        for(Images img: images){
-            Images images1 = new Images();
-            images1.setImageId(img.getImageId());
-            images1.setItemId(img.getItemId());
-            images1.setImagePath(downloadUrl+img.getImagePath());
-            imagesList.add(images1);
-        }
-        return imagesList;
-    }
 }

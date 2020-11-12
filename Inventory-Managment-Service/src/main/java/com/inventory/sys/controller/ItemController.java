@@ -8,7 +8,6 @@ import com.inventory.sys.exceptions.ResponseMessage;
 import com.inventory.sys.messageDto.ItemRequestDTO;
 import com.inventory.sys.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -101,11 +100,6 @@ public class ItemController {
         return itemService.getAllItems();
     }
 
-    @GetMapping("/get-images")
-    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public List<Images> getAllImages() throws Exception{
-        return itemService.getImages();
-    }
 
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws Exception{
