@@ -94,6 +94,12 @@ public class ItemController {
         return itemService.deleteItemDetail(itemDetailId);
     }
 
+    @DeleteMapping("/delete-item-image/{itemId}")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public CustomResponseDto deleteImage(@PathVariable(value = "itemId") Long itemId) {
+        return itemService.deleteImages(itemId);
+    }
+
     @GetMapping("/get-items")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public List<Item> getAllItems(){

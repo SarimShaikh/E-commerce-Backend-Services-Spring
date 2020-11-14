@@ -18,13 +18,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ItemService {
@@ -176,6 +175,20 @@ public class ItemService {
         itemDetailsRepository.delete(itemDetails);
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Item detail Deleted");
+        return customResponseDto;
+    }
+
+    public CustomResponseDto deleteImages(Long itemId){
+        CustomResponseDto customResponseDto = new CustomResponseDto();
+        List<Images> imagesList= imagesRepository.getAllByItemId(itemId);
+        for (Images image : imagesList) {
+            String path = filePath+"//"+image.getImagePath();
+            File file = new File(path);
+            file.delete();
+            imagesRepository.delete(image);
+        }
+        customResponseDto.setResponseCode("200");
+        customResponseDto.setMessage("Image Deleted");
         return customResponseDto;
     }
 

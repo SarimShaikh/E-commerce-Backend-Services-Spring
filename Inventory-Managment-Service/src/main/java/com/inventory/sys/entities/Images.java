@@ -47,7 +47,7 @@ public class Images implements Serializable {
         this.itemId = itemId;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "ITEM_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonBackReference
     public Item getItem() {
