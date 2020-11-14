@@ -36,8 +36,8 @@ public class ItemService {
     private String downloadUrl;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository , ImagesRepository imagesRepository , ItemDetailsRepository itemDetailsRepository,
-                       InventoryDetailRepository inventoryDetailRepository , @Value("${image.download.path}") String url , @Value("${images.path}") String imgPath) {
+    public ItemService(ItemRepository itemRepository, ImagesRepository imagesRepository, ItemDetailsRepository itemDetailsRepository,
+                       InventoryDetailRepository inventoryDetailRepository, @Value("${image.download.path}") String url, @Value("${images.path}") String imgPath) {
         this.itemRepository = itemRepository;
         this.imagesRepository = imagesRepository;
         this.itemDetailsRepository = itemDetailsRepository;
@@ -47,11 +47,10 @@ public class ItemService {
     }
 
 
-
-    public void saveImages(MultipartFile file , Long itemId) {
+    public void saveImages(MultipartFile file, Long itemId) {
         try {
             final Path root = Paths.get(filePath);
-            String fileName = UUID.randomUUID().toString().replace("-", "")+
+            String fileName = UUID.randomUUID().toString().replace("-", "") +
                     UtilsClass.getExtention(file.getOriginalFilename());
             Files.copy(file.getInputStream(), root.resolve(fileName));
 
@@ -68,19 +67,19 @@ public class ItemService {
     }
 
     public CustomResponseDto addItem(ItemRequestDTO itemRequestDTO) throws ResourceNotFoundException {
-            CustomResponseDto customResponseDto = new CustomResponseDto();
-        if(itemRepository.existsByItemName(itemRequestDTO.getItemName())){
+        CustomResponseDto customResponseDto = new CustomResponseDto();
+        if (itemRepository.existsByItemName(itemRequestDTO.getItemName())) {
             customResponseDto.setResponseCode("401");
             customResponseDto.setMessage("Item Already Exists with that name!");
-            throw  new ResourceNotFoundException("Item Already Exists with that name!");
+            throw new ResourceNotFoundException("Item Already Exists with that name!");
         }
 
-        Item item =new Item();
+        Item item = new Item();
         item.setCompanyId(itemRequestDTO.getCompanyId());
         item.setCategoryId(itemRequestDTO.getCategoryId());
         item.setSubCategoryId(itemRequestDTO.getSubCategoryId());
         item.setItemName(itemRequestDTO.getItemName());
-        item.setIsActive((byte)1);
+        item.setIsActive((byte) 1);
 
         final Item item1 = itemRepository.save(item);
         customResponseDto.setResponseCode("200");
@@ -96,17 +95,17 @@ public class ItemService {
         Item item = itemRepository.findById(itemRequestDTO.getItemId()).
                 orElseThrow(() -> new ResourceNotFoundException("Item not found for this id :: " + itemRequestDTO.getItemId()));
 
-        for(ItemDetailsDTO itemDetails : itemRequestDTO.getItemDetails()){
+        for (ItemDetailsDTO itemDetails : itemRequestDTO.getItemDetails()) {
             ItemDetails itemDetails1 = new ItemDetails();
             itemDetails1.setItemId(item.getItemId());
             itemDetails1.setItemSize(itemDetails.getItemSize());
             itemDetails1.setItemPrice(itemDetails.getItemPrice());
             itemDetails1.setFineAmount(itemDetails.getFineAmount());
             itemDetails1.setRentalDays(itemDetails.getRentalDays());
-            itemDetails1.setIsActive((byte)1);
+            itemDetails1.setIsActive((byte) 1);
             itemDetailsRepository.save(itemDetails1);
             itemDetailsRepository.flush();
-            inventoryDetailRepository.save(new InventoryDetail(item.getItemId(),itemDetails1.getItemDetailId(),(long)0,(byte)1));
+            inventoryDetailRepository.save(new InventoryDetail(item.getItemId(), itemDetails1.getItemDetailId(), (long) 0, (byte) 1));
         }
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Item Details added successfully");
@@ -133,8 +132,8 @@ public class ItemService {
 
     public CustomResponseDto updateItemDetail(ItemRequestDTO itemRequestDTO) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
-        if(!itemRequestDTO.getItemDetails().isEmpty()){
-            for(ItemDetailsDTO itemDetailsDTO : itemRequestDTO.getItemDetails()){
+        if (!itemRequestDTO.getItemDetails().isEmpty()) {
+            for (ItemDetailsDTO itemDetailsDTO : itemRequestDTO.getItemDetails()) {
                 ItemDetails itemDetails = itemDetailsRepository.findById(itemDetailsDTO.getItemDetailId()).
                         orElseThrow(() -> new ResourceNotFoundException("Item Detail not found for this id :: " + itemDetailsDTO.getItemDetailId()));
 
@@ -154,7 +153,7 @@ public class ItemService {
     }
 
     @Transactional
-    public CustomResponseDto deleteItemWithDetails(Long itemId) throws ResourceNotFoundException{
+    public CustomResponseDto deleteItemWithDetails(Long itemId) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found for this id :: " + itemId));
@@ -167,7 +166,7 @@ public class ItemService {
         return customResponseDto;
     }
 
-    public CustomResponseDto deleteItemDetail(Long itemDetailId) throws ResourceNotFoundException{
+    public CustomResponseDto deleteItemDetail(Long itemDetailId) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
         ItemDetails itemDetails = itemDetailsRepository.findById(itemDetailId).
                 orElseThrow(() -> new ResourceNotFoundException("Item Detail not found for this id :: " + itemDetailId));
@@ -178,32 +177,33 @@ public class ItemService {
         return customResponseDto;
     }
 
-    public CustomResponseDto deleteImages(Long itemId){
+    public CustomResponseDto deleteImage(Long imgeId) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
-        List<Images> imagesList= imagesRepository.getAllByItemId(itemId);
-        for (Images image : imagesList) {
-            String path = filePath+"//"+image.getImagePath();
-            File file = new File(path);
-            file.delete();
-            imagesRepository.delete(image);
-        }
+        Images image = imagesRepository.findById(imgeId).
+                orElseThrow(() -> new ResourceNotFoundException("Image not found for this id :: " + imgeId));
+
+        String path = filePath + "//" + image.getImagePath();
+        File file = new File(path);
+        file.delete();
+
+        imagesRepository.delete(image);
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Image Deleted");
         return customResponseDto;
     }
 
-    public List<Item> getAllItems(){
+    public List<Item> getAllItems() {
         List<Item> items = itemRepository.findAll();
         List<Images> imagesList;
         Collection<Images> images;
-        for(Item item : items){
+        for (Item item : items) {
             imagesList = new ArrayList<>();
             images = item.getImages();
-            for(Images img : images){
+            for (Images img : images) {
                 Images images1 = new Images();
                 images1.setItemId(img.getItemId());
                 images1.setImageId(img.getImageId());
-                images1.setImagePath(downloadUrl+img.getImagePath());
+                images1.setImagePath(downloadUrl + img.getImagePath());
                 imagesList.add(images1);
             }
             item.setImages(imagesList);

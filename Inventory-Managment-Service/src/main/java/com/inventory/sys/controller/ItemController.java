@@ -94,10 +94,10 @@ public class ItemController {
         return itemService.deleteItemDetail(itemDetailId);
     }
 
-    @DeleteMapping("/delete-item-image/{itemId}")
+    @DeleteMapping("/delete-item-image/{imgeId}")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public CustomResponseDto deleteImage(@PathVariable(value = "itemId") Long itemId) {
-        return itemService.deleteImages(itemId);
+    public CustomResponseDto deleteImage(@PathVariable(value = "imgeId") Long imgeId) throws ResourceNotFoundException{
+        return itemService.deleteImage(imgeId);
     }
 
     @GetMapping("/get-items")
