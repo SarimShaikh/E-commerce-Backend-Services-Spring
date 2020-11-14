@@ -2,6 +2,7 @@ package com.usermangment.auth.messageDto.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -25,6 +26,9 @@ public class SignUpRequest {
     @NotBlank
     @Size(min = 3, max = 50)
     private String contact;
+
+    @NotNull
+    private String isCustomer;
 
     public String getUsername() {
         return username;
@@ -64,5 +68,13 @@ public class SignUpRequest {
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    public String getIsCustomer() {
+        return isCustomer;
+    }
+
+    public void setIsCustomer(String isCustomer) {
+        this.isCustomer = isCustomer;
     }
 }

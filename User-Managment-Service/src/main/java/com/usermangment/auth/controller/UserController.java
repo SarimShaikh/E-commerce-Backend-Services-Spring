@@ -50,6 +50,19 @@ public class UserController {
         return userService.updateUser(userId,userDetails);
     }
 
+    @DeleteMapping("/delete-user/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deleteUser(@PathVariable(value = "userId") Long userId)
+            throws ResourceNotFoundException {
+        return userService.deleteUser(userId);
+    }
+
+    @GetMapping("/user/all/{isCustomer}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> getAllUserByType(@PathVariable(value = "isCustomer") String isCustomer){
+        return userService.getUserByType(isCustomer);
+    }
+
     @GetMapping("/user/privileges")
     @PreAuthorize("hasRole('ADMIN')")
     public List<Privilege> getAllPrivilege(){

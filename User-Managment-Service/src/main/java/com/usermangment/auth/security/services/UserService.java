@@ -75,7 +75,7 @@ public class UserService {
 
         // Creating user's account
         User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),signUpRequest.getContact(),(byte)1);
+                signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),signUpRequest.getContact(),(byte)1,signUpRequest.getIsCustomer());
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -117,16 +117,29 @@ public class UserService {
 
     public ResponseEntity<User> updateUser(Long userId, User userDetail) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 
         user.setUserId(userDetail.getUserId());
         user.setEmail(userDetail.getEmail());
         user.setUsername(userDetail.getUsername());
         user.setContact(userDetail.getContact());
         user.setAddress(userDetail.getAddress());
+        user.setRoles(userDetail.getRoles());
 
         final User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    public ResponseEntity<String> deleteUser(Long userId)throws ResourceNotFoundException{
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+
+        userRepository.delete(user);
+        return ResponseEntity.ok().body("User delete successfully!");
+    }
+
+    public List<User> getUserByType(String isCustomer){
+        return userRepository.getAllByIsCustomer(isCustomer);
     }
 
     public List<Privilege> privilegeList(){
