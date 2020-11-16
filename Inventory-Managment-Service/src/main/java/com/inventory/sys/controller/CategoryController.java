@@ -55,7 +55,7 @@ public class CategoryController {
     }
 
     @GetMapping("/get-categories")
-    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public List<Category> getAllCategories(){
         return categoryService.getAllCategories();
     }

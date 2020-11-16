@@ -25,9 +25,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8082"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8082"})
 @RequestMapping("/api/v1/inventory")
 public class ItemController {
 
@@ -39,14 +40,14 @@ public class ItemController {
     }
 
     @PostMapping("/upload-images/{itemId}")
-    public ResponseEntity<ResponseMessage> uploadFiles(@RequestParam("files") MultipartFile[] files ,
+    public ResponseEntity<ResponseMessage> uploadFiles(@RequestParam("files") MultipartFile[] files,
                                                        @PathVariable(value = "itemId") Long itemId) {
         String message = "";
         try {
             List<String> fileNames = new ArrayList<>();
 
             Arrays.asList(files).stream().forEach(file -> {
-                itemService.saveImages(file,itemId);
+                itemService.saveImages(file, itemId);
                 fileNames.add(file.getOriginalFilename());
             });
 
@@ -96,25 +97,36 @@ public class ItemController {
 
     @DeleteMapping("/delete-item-image/{imgeId}")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public CustomResponseDto deleteImage(@PathVariable(value = "imgeId") Long imgeId) throws ResourceNotFoundException{
+    public CustomResponseDto deleteImage(@PathVariable(value = "imgeId") Long imgeId) throws ResourceNotFoundException {
         return itemService.deleteImage(imgeId);
     }
 
     @GetMapping("/get-items")
-    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public List<Item> getAllItems(){
-        return itemService.getAllItems();
+    //@PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public Map<String, Object> getAllItems(@RequestParam(required = false) String itemName,
+                                           @RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "5") int size) {
+        return itemService.getAllItems(itemName, page, size);
+    }
+
+    @GetMapping("/get-category-items")
+    //@PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public Map<String, Object> getAllItemsWithCategoryAndSubCategory(@RequestParam(name = "categoryId") Long categoryId,
+                                                                     @RequestParam(name = "subCategoryId") Long subCategoryId,
+                                                                     @RequestParam(defaultValue = "0") int page,
+                                                                     @RequestParam(defaultValue = "5") int size) {
+        return itemService.getAllItemsByCategoryIdAndSubCategoryId(categoryId, subCategoryId, page, size);
     }
 
 
     @GetMapping("/downloadFile/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws Exception{
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws Exception {
         // Load file as Resource
-        Resource resource ;
+        Resource resource;
         try {
-            Path filePath = Paths.get( "D://java-projects//e-commerce-backend-services//Inventory-Managment-Service//upload-images//"+fileName)
+            Path filePath = Paths.get("D://java-projects//e-commerce-backend-services//Inventory-Managment-Service//upload-images//" + fileName)
                     .toAbsolutePath().normalize();
-             resource = new UrlResource(filePath.toUri());
+            resource = new UrlResource(filePath.toUri());
 
         } catch (MalformedURLException ex) {
             throw new MalformedURLException("File not found " + fileName);
@@ -128,7 +140,7 @@ public class ItemController {
         }
 
         // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 

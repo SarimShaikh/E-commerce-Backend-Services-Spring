@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -192,8 +195,11 @@ public class ItemService {
         return customResponseDto;
     }
 
-    public List<Item> getAllItems() {
-        List<Item> items = itemRepository.findAll();
+    public Map<String, Object> getAllItems(String itemName, int page, int size) {
+        Map<String, Object> response = new HashMap<>();
+        Pageable paging = PageRequest.of(page, size);
+        Page<Item> pageItem = itemName != null ? itemRepository.getAllByItemNameStartsWith(itemName, paging) : itemRepository.findAll(paging);
+        List<Item> items = pageItem.getContent();
         List<Images> imagesList;
         Collection<Images> images;
         for (Item item : items) {
@@ -209,7 +215,40 @@ public class ItemService {
             item.setImages(imagesList);
 
         }
-        return items;
+        response.put("items", items);
+        response.put("currentPage", pageItem.getNumber());
+        response.put("totalItems", pageItem.getTotalElements());
+        response.put("totalPages", pageItem.getTotalPages());
+
+        return response;
+    }
+
+    public Map<String, Object> getAllItemsByCategoryIdAndSubCategoryId(Long categoryId, Long subCategoryId, int page, int size) {
+        Map<String, Object> response = new HashMap<>();
+        Pageable paging = PageRequest.of(page, size);
+        Page<Item> pageItem = itemRepository.getAllByCategoryIdOrSubCategoryId(categoryId, subCategoryId, paging);
+        List<Item> items = pageItem.getContent();
+        List<Images> imagesList;
+        Collection<Images> images;
+        for (Item item : items) {
+            imagesList = new ArrayList<>();
+            images = item.getImages();
+            for (Images img : images) {
+                Images images1 = new Images();
+                images1.setItemId(img.getItemId());
+                images1.setImageId(img.getImageId());
+                images1.setImagePath(downloadUrl + img.getImagePath());
+                imagesList.add(images1);
+            }
+            item.setImages(imagesList);
+
+        }
+        response.put("items", items);
+        response.put("currentPage", pageItem.getNumber());
+        response.put("totalItems", pageItem.getTotalElements());
+        response.put("totalPages", pageItem.getTotalPages());
+
+        return response;
     }
 
 }
