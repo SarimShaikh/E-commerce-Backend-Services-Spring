@@ -1,7 +1,5 @@
 package com.inventory.sys.controller;
 
-import com.inventory.sys.entities.Images;
-import com.inventory.sys.entities.Item;
 import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.exceptions.ResponseMessage;
