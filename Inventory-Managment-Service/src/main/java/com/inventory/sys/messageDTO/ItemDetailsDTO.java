@@ -1,4 +1,4 @@
-package com.inventory.sys.messageDto;
+package com.inventory.sys.messageDTO;
 
 import java.io.Serializable;
 

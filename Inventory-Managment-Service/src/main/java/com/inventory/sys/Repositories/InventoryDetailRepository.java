@@ -19,4 +19,5 @@ public interface InventoryDetailRepository extends JpaRepository<InventoryDetail
     List<Map<String, Object>> getItemsInventory();
 
     void deleteAllByItemId(Long itemId);
+
 }

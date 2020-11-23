@@ -6,7 +6,7 @@ import com.inventory.sys.entities.Category;
 import com.inventory.sys.entities.SubCategory;
 import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
-import com.inventory.sys.messageDto.CategoryRequestDTO;
+import com.inventory.sys.messageDTO.CategoryRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.inventory.sys.messageDto;
+package com.inventory.sys.messageDTO;
 
 import com.inventory.sys.entities.SubCategory;
 

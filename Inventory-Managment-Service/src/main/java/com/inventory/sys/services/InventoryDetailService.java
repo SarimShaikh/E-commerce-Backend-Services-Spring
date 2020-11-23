@@ -4,8 +4,7 @@ import com.inventory.sys.Repositories.InventoryDetailRepository;
 import com.inventory.sys.entities.InventoryDetail;
 import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
-import com.inventory.sys.messageDto.InventoryDTO;
-import com.inventory.sys.messageDto.ItemRequestDTO;
+import com.inventory.sys.messageDTO.InventoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +40,7 @@ public class InventoryDetailService {
             inventoryDTO.setAvailableQuan(((Integer) item.get("availableQuan")).longValue());
             inventoryDTOList.add(inventoryDTO);
         }
-        return  inventoryDTOList;
+        return inventoryDTOList;
     }
 
     public CustomResponseDto updateInventory(InventoryDTO inventoryDTO) throws ResourceNotFoundException {
@@ -56,4 +55,5 @@ public class InventoryDetailService {
         customResponseDto.setEntityClass(inventoryDetail1);
         return customResponseDto;
     }
+
 }

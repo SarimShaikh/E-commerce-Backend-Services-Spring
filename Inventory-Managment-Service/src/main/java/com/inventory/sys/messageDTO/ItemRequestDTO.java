@@ -1,7 +1,4 @@
-package com.inventory.sys.messageDto;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.inventory.sys.entities.ItemDetails;
+package com.inventory.sys.messageDTO;
 
 import java.io.Serializable;
 import java.util.Collection;

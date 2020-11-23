@@ -3,7 +3,7 @@ package com.inventory.sys.controller;
 import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.exceptions.ResponseMessage;
-import com.inventory.sys.messageDto.ItemRequestDTO;
+import com.inventory.sys.messageDTO.ItemRequestDTO;
 import com.inventory.sys.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;

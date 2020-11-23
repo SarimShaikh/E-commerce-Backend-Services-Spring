@@ -3,7 +3,7 @@ package com.inventory.sys.controller;
 import com.inventory.sys.entities.Category;
 import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
-import com.inventory.sys.messageDto.CategoryRequestDTO;
+import com.inventory.sys.messageDTO.CategoryRequestDTO;
 import com.inventory.sys.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

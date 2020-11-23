@@ -49,7 +49,7 @@ public class SubCategory extends EntityBase<String> implements Serializable {
         this.subCategoryType = subCategoryType;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "CATEGORY_ID" ,nullable = false , insertable = false , updatable = false)
     @JsonBackReference
     public Category getCategory() {
