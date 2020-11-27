@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InventoryDetailRepository extends JpaRepository<InventoryDetail,Long> {
-
+     InventoryDetail findByItemDetailId(Long itemDetailId);
 }

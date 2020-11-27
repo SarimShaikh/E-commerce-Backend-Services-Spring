@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "order")
+@Table(name = "order_tbl")
 public class Order implements Serializable {
 
     private Long orderId;

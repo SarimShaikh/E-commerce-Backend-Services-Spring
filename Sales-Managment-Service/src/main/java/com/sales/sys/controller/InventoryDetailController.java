@@ -18,9 +18,9 @@ public class InventoryDetailController {
         this.inventoryDetailService = inventoryDetailService;
     }
 
-    @GetMapping("/item/check-quantity")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public boolean checkInventoryQuantity(@RequestParam(name = "inventoryId") Long inventoryId, @RequestParam(name = "quantity") Long quantity) throws ResourceNotFoundException {
-        return inventoryDetailService.checkAvailQuantity(inventoryId, quantity);
+    @GetMapping("/check-quantity")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public boolean checkInventoryQuantity(@RequestParam(name = "itemDetailId") Long itemDetailId, @RequestParam(name = "quantity") Long quantity) throws ResourceNotFoundException {
+        return inventoryDetailService.checkAvailQuantity(itemDetailId, quantity);
     }
 }

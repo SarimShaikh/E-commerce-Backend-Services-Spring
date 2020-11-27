@@ -29,7 +29,7 @@ public class InventoryDetailController {
     }
 
     @PutMapping("/update-inventory")
-    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public CustomResponseDto updateInventoryDetail(@RequestBody InventoryDTO inventoryDTO) throws ResourceNotFoundException {
         return inventoryDetailService.updateInventory(inventoryDTO);
     }

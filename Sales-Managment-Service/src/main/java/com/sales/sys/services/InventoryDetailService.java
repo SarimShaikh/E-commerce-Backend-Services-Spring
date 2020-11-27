@@ -16,11 +16,12 @@ public class InventoryDetailService {
         this.inventoryDetailRepository = inventoryDetailRepository;
     }
 
-    public boolean checkAvailQuantity(Long inventoryId, Long quantity) throws ResourceNotFoundException {
+    public boolean checkAvailQuantity(Long itemDetailId, Long quantity) throws ResourceNotFoundException {
 
-        InventoryDetail inventoryDetail = inventoryDetailRepository.findById(inventoryId).
-                orElseThrow(() -> new ResourceNotFoundException("Inventory record not found for this id :: " + inventoryId));
-
+        InventoryDetail inventoryDetail = inventoryDetailRepository.findByItemDetailId(itemDetailId);
+        if (inventoryDetail == null) {
+            throw new ResourceNotFoundException("Inventory record not found for this Item :: " + itemDetailId);
+        }
         boolean checkQunatity = inventoryDetail.getAvailQuantity() >= quantity ? true : false;
         return checkQunatity;
     }

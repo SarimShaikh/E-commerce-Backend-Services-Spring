@@ -9,8 +9,8 @@ public class OrderDetailDTO implements Serializable {
     private Long itemDetailId;
     private Long quantity;
     private Long price;
-    private Date fromDate;
-    private Date toDate;
+    private String fromDate;
+    private String toDate;
 
     public Long getItemId() {
         return itemId;
@@ -44,19 +44,19 @@ public class OrderDetailDTO implements Serializable {
         this.price = price;
     }
 
-    public Date getFromDate() {
+    public String getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(Date fromDate) {
+    public void setFromDate(String fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Date getToDate() {
+    public String getToDate() {
         return toDate;
     }
 
-    public void setToDate(Date toDate) {
+    public void setToDate(String toDate) {
         this.toDate = toDate;
     }
 }

@@ -76,6 +76,7 @@ public class RentalItems extends EntityBase<String> implements Serializable {
     }
 
     @Basic
+    @Temporal(TemporalType.DATE)
     @Column(name = "FROM_DATE", nullable = false)
     public Date getFromDate() {
         return fromDate;
@@ -86,6 +87,7 @@ public class RentalItems extends EntityBase<String> implements Serializable {
     }
 
     @Basic
+    @Temporal(TemporalType.DATE)
     @Column(name = "TO_DATE", nullable = false)
     public Date getToDate() {
         return toDate;

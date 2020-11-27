@@ -6,11 +6,11 @@ import java.security.SecureRandom;
 
 public class UtilsClass {
 
-    public String genRandomOrderNum() {
+    public static String genRandomOrderNum() {
         SecureRandom random = new SecureRandom();
         int num = random.nextInt(100000);
-        String formatted = String.format("%05d", num);
-        return formatted;
+        String formattedNum = String.format("%05d", num);
+        return formattedNum;
     }
 
     public static Date convertDate(String dateParam) throws Exception {

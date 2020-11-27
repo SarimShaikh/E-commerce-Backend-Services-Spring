@@ -47,8 +47,8 @@ public class InventoryDetailService {
         CustomResponseDto customResponseDto = new CustomResponseDto();
         InventoryDetail inventoryDetail = inventoryDetailRepository.findById(inventoryDTO.getInventoryId()).
                 orElseThrow(() -> new ResourceNotFoundException("Inventory record not found for this id :: " + inventoryDTO.getInventoryId()));
-
-        inventoryDetail.setAvailQuantity(inventoryDTO.getAvailableQuan());
+        Long updateQuantity = inventoryDetail.getAvailQuantity()+inventoryDTO.getAvailableQuan();
+        inventoryDetail.setAvailQuantity(updateQuantity);
         final InventoryDetail inventoryDetail1 = inventoryDetailRepository.save(inventoryDetail);
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Inventory Updated successfully");
