@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Service
 public class OrderService {
 
@@ -39,6 +41,7 @@ public class OrderService {
         Order order = new Order();
         order.setUserId(orderDTO.getUserId());
         order.setOrderNumber(checkOrderNumber(UtilsClass.genRandomOrderNum()));
+        order.setCreatedDate(new Date());
         final Order order1 = orderRepository.save(order);
 
         for (OrderDetailDTO orderDetailDTO : orderDTO.getOrderDetailDTO()) {

@@ -9,12 +9,14 @@
         <module name="Inventory-Managment-Service" />
         <module name="User-Managment-Service" />
         <module name="Sales-Managment-Service" />
+        <module name="Payment-Service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Inventory-Managment-Service" options="-parameters" />
+      <module name="Payment-Service" options="-parameters" />
       <module name="Sales-Managment-Service" options="-parameters" />
       <module name="User-Managment-Service" options="-parameters" />
     </option>

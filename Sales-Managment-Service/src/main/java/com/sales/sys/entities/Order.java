@@ -1,7 +1,5 @@
 package com.sales.sys.entities;
 
-import org.springframework.data.annotation.CreatedDate;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -48,7 +46,7 @@ public class Order implements Serializable {
         this.orderNumber = orderNumber;
     }
 
-    @CreatedDate
+    @Basic
     @Temporal(TemporalType.DATE)
     @Column(name = "DATE_TIME")
     public Date getCreatedDate() {
@@ -59,7 +57,7 @@ public class Order implements Serializable {
         this.createdDate = createdDate;
     }
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public Collection<OrderDetails> getOrderDetails() {
         return orderDetails;
     }
