@@ -6,6 +6,7 @@ import java.util.Collection;
 public class OrderDTO implements Serializable {
 
     private Long userId;
+    private PaymentDTO paymentDTO;
     private Collection<OrderDetailDTO> orderDetailDTO;
 
     public Long getUserId() {
@@ -14,6 +15,14 @@ public class OrderDTO implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public PaymentDTO getPaymentDTO() {
+        return paymentDTO;
+    }
+
+    public void setPaymentDTO(PaymentDTO paymentDTO) {
+        this.paymentDTO = paymentDTO;
     }
 
     public Collection<OrderDetailDTO> getOrderDetailDTO() {

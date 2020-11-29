@@ -1,32 +1,15 @@
-package com.payment.service.entities;
+package com.sales.sys.messageDTO;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-@Table(name = "payment")
-public class Payment implements Serializable {
+public class PaymentDTO implements Serializable {
 
-    private Long paymentId;
     private String paymentType;
     private Date dateTime;
     private Integer amount;
     private String orderNumber;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PAYMENT_ID", nullable = false)
-    public Long getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(Long paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    @Basic
-    @Column(name = "PAYMENT_TYPE", nullable = false)
     public String getPaymentType() {
         return paymentType;
     }
@@ -35,9 +18,6 @@ public class Payment implements Serializable {
         this.paymentType = paymentType;
     }
 
-    @Basic
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "DATE_TIME")
     public Date getDateTime() {
         return dateTime;
     }
@@ -50,14 +30,10 @@ public class Payment implements Serializable {
         return amount;
     }
 
-    @Basic
-    @Column(name = "AMOUNT", nullable = false)
     public void setAmount(Integer amount) {
         this.amount = amount;
     }
 
-    @Basic
-    @Column(name = "ORDER_NO", nullable = false)
     public String getOrderNumber() {
         return orderNumber;
     }

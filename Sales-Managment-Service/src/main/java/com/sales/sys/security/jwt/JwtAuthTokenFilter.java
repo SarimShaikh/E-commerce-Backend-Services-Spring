@@ -1,5 +1,6 @@
 package com.sales.sys.security.jwt;
 
+import com.sales.sys.services.apicall.RestPaymentApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
         try {
 
             String jwt = getJwt(request);
+            RestPaymentApi.accessToken = jwt;
             if (jwt!=null && tokenProvider.validateJwtToken(jwt)) {
                 String username = tokenProvider.getUserNameFromJwtToken(jwt);
                 Collection<? extends GrantedAuthority> authorities = tokenProvider.getAuthorities(jwt);

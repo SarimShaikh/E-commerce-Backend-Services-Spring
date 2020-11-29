@@ -18,4 +18,5 @@ public class UtilsClass {
         Date date = formatter.parse(dateParam);
         return date;
     }
+
 }

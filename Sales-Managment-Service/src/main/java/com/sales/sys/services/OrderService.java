@@ -12,6 +12,7 @@ import com.sales.sys.repositories.InventoryDetailRepository;
 import com.sales.sys.repositories.OrderDetailsRepository;
 import com.sales.sys.repositories.OrderRepository;
 import com.sales.sys.repositories.RentalItemsRepository;
+import com.sales.sys.services.apicall.RestPaymentApi;
 import com.sales.sys.utils.UtilsClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,13 +27,15 @@ public class OrderService {
     private OrderDetailsRepository orderDetailsRepository;
     private RentalItemsRepository rentalItemsRepository;
     private InventoryDetailRepository inventoryDetailRepository;
+    private RestPaymentApi restPaymentApi;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, OrderDetailsRepository orderDetailsRepository, RentalItemsRepository rentalItemsRepository, InventoryDetailRepository inventoryDetailRepository) {
+    public OrderService(OrderRepository orderRepository, OrderDetailsRepository orderDetailsRepository, RentalItemsRepository rentalItemsRepository, InventoryDetailRepository inventoryDetailRepository, RestPaymentApi restPaymentApi) {
         this.orderRepository = orderRepository;
         this.orderDetailsRepository = orderDetailsRepository;
         this.rentalItemsRepository = rentalItemsRepository;
         this.inventoryDetailRepository = inventoryDetailRepository;
+        this.restPaymentApi = restPaymentApi;
     }
 
     @Transactional
@@ -43,33 +46,39 @@ public class OrderService {
         order.setOrderNumber(checkOrderNumber(UtilsClass.genRandomOrderNum()));
         order.setCreatedDate(new Date());
         final Order order1 = orderRepository.save(order);
+        orderDTO.getPaymentDTO().setOrderNumber(order1.getOrderNumber());
+        orderDTO.getPaymentDTO().setDateTime(new Date());
+        boolean isPaymentInititate = restPaymentApi.initiatePayment(orderDTO.getPaymentDTO());
 
-        for (OrderDetailDTO orderDetailDTO : orderDTO.getOrderDetailDTO()) {
-            if (updateInventoryQuantity(orderDetailDTO.getItemDetailId(), orderDetailDTO.getQuantity())) {
-                RentalItems rentalItems = new RentalItems();
-                OrderDetails orderDetails = new OrderDetails();
-                orderDetails.setOrderId(order1.getOrderId());
-                orderDetails.setItemId(orderDetailDTO.getItemId());
-                orderDetails.setItemDetailId(orderDetailDTO.getItemDetailId());
-                orderDetails.setQuantity(orderDetailDTO.getQuantity());
-                orderDetails.setPrice(orderDetailDTO.getPrice());
-                orderDetailsRepository.save(orderDetails);
-                orderDetailsRepository.flush();
-                rentalItems.setItemId(orderDetails.getItemId());
-                rentalItems.setItemDetailId(orderDetails.getItemDetailId());
-                rentalItems.setUserId(orderDTO.getUserId());
-                rentalItems.setOrderNumber(order1.getOrderNumber());
-                rentalItems.setFromDate(UtilsClass.convertDate(orderDetailDTO.getFromDate()));
-                rentalItems.setToDate(UtilsClass.convertDate(orderDetailDTO.getToDate()));
-                rentalItems.setPenaltyAmount((long) 0);
-                rentalItems.setQuantity(orderDetailDTO.getQuantity());
-                rentalItems.setIsActive((byte) 1);
-                rentalItems.setStatus("Active");
-                rentalItemsRepository.save(rentalItems);
-            } else {
-                customResponseDto.setResponseCode("400");
-                customResponseDto.setMessage("Quantity out of stock");
-                throw new OrderItemException(customResponseDto);
+        if (isPaymentInititate) {
+            for (OrderDetailDTO orderDetailDTO : orderDTO.getOrderDetailDTO()) {
+                if (updateInventoryQuantity(orderDetailDTO.getItemDetailId(), orderDetailDTO.getQuantity())) {
+                    RentalItems rentalItems = new RentalItems();
+                    OrderDetails orderDetails = new OrderDetails();
+                    orderDetails.setOrderId(order1.getOrderId());
+                    orderDetails.setItemId(orderDetailDTO.getItemId());
+                    orderDetails.setItemDetailId(orderDetailDTO.getItemDetailId());
+                    orderDetails.setQuantity(orderDetailDTO.getQuantity());
+                    orderDetails.setPrice(orderDetailDTO.getPrice());
+                    orderDetailsRepository.save(orderDetails);
+                    orderDetailsRepository.flush();
+                    rentalItems.setItemId(orderDetails.getItemId());
+                    rentalItems.setItemDetailId(orderDetails.getItemDetailId());
+                    rentalItems.setUserId(orderDTO.getUserId());
+                    rentalItems.setOrderNumber(order1.getOrderNumber());
+                    rentalItems.setFromDate(UtilsClass.convertDate(orderDetailDTO.getFromDate()));
+                    rentalItems.setToDate(UtilsClass.convertDate(orderDetailDTO.getToDate()));
+                    rentalItems.setPenaltyAmount((long) 0);
+                    rentalItems.setQuantity(orderDetailDTO.getQuantity());
+                    rentalItems.setIsActive((byte) 1);
+                    rentalItems.setStatus("Active");
+                    rentalItemsRepository.save(rentalItems);
+                    rentalItemsRepository.flush();
+                } else {
+                    customResponseDto.setResponseCode("400");
+                    customResponseDto.setMessage("Quantity out of stock");
+                    throw new OrderItemException(customResponseDto);
+                }
             }
         }
         customResponseDto.setResponseCode("200");
