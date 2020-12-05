@@ -2,7 +2,7 @@ package com.sales.sys.messageDTO;
 
 import java.io.Serializable;
 
-public class RentalItemsDTO implements Serializable {
+public class RentalReturnItemsDTO implements Serializable {
 
     private String itemName;
     private String itemSize;

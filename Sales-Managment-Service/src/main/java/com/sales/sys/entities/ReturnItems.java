@@ -12,7 +12,7 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class ReturnItems extends EntityBase<String> implements Serializable {
 
-    private Long rentalId;
+    private Long returnId;
     private Long itemId;
     private Long itemDetailId;
     private Long userId;
@@ -26,13 +26,13 @@ public class ReturnItems extends EntityBase<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "RENTAL_ID", nullable = false)
-    public Long getRentalId() {
-        return rentalId;
+    @Column(name = "RETURN_ID", nullable = false)
+    public Long getReturnId() {
+        return returnId;
     }
 
-    public void setRentalId(Long rentalId) {
-        this.rentalId = rentalId;
+    public void setReturnId(Long returnId) {
+        this.returnId = returnId;
     }
 
     @Basic
@@ -132,6 +132,6 @@ public class ReturnItems extends EntityBase<String> implements Serializable {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = "complete";
     }
 }

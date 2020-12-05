@@ -1,7 +1,13 @@
 package com.sales.sys.services;
 
-import com.sales.sys.messageDTO.RentalItemsDTO;
+import com.sales.sys.entities.RentalItems;
+import com.sales.sys.entities.ReturnItems;
+import com.sales.sys.exceptions.ResourceNotFoundException;
+import com.sales.sys.messageDTO.CustomResponseDto;
+import com.sales.sys.messageDTO.RentalReturnItemsDTO;
 import com.sales.sys.repositories.RentalItemsRepository;
+import com.sales.sys.repositories.ReturnItemsRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,49 +19,65 @@ import java.util.Map;
 public class RentalItemsService {
 
     private RentalItemsRepository rentalItemsRepository;
+    private ReturnItemsRepository returnItemsRepository;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public RentalItemsService(RentalItemsRepository rentalItemsRepository) {
+    public RentalItemsService(RentalItemsRepository rentalItemsRepository, ReturnItemsRepository returnItemsRepository, ModelMapper modelMapper) {
         this.rentalItemsRepository = rentalItemsRepository;
+        this.returnItemsRepository = returnItemsRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public List<RentalItemsDTO> getAllItemsInventory() {
+    public List<RentalReturnItemsDTO> getAllRentedItems() {
         List<Map<String, Object>> rentItemsList = rentalItemsRepository.getAllRentalItems();
-        List<RentalItemsDTO> rentalItemsList = new ArrayList<>();
+        List<RentalReturnItemsDTO> rentalItemsList = new ArrayList<>();
         for (Map<String, Object> item : rentItemsList) {
-            RentalItemsDTO rentalItemsDTO = new RentalItemsDTO();
-            rentalItemsDTO.setItemName((String) item.get("itemName"));
-            rentalItemsDTO.setItemSize((String) item.get("itemSize"));
-            rentalItemsDTO.setItemPrice(((Integer) item.get("itemPrice")).longValue());
-            rentalItemsDTO.setOrderNumber((String) item.get("orderNumber"));
-            rentalItemsDTO.setPenaltyAmount(((Integer) item.get("penaltyAmount")).longValue());
-            rentalItemsDTO.setQuantity(((Integer) item.get("quantity")).longValue());
-            rentalItemsDTO.setFromDate(item.get("fromDate").toString());
-            rentalItemsDTO.setToDate(item.get("toDate").toString());
-            rentalItemsDTO.setOrderDate(item.get("orderDate").toString());
-            rentalItemsDTO.setStatus((String) item.get("status"));
-            rentalItemsList.add(rentalItemsDTO);
+            RentalReturnItemsDTO rentalReturnItemsDTO = new RentalReturnItemsDTO();
+            rentalReturnItemsDTO.setItemName((String) item.get("itemName"));
+            rentalReturnItemsDTO.setItemSize((String) item.get("itemSize"));
+            rentalReturnItemsDTO.setItemPrice(((Integer) item.get("itemPrice")).longValue());
+            rentalReturnItemsDTO.setOrderNumber((String) item.get("orderNumber"));
+            rentalReturnItemsDTO.setPenaltyAmount(((Integer) item.get("penaltyAmount")).longValue());
+            rentalReturnItemsDTO.setQuantity(((Integer) item.get("quantity")).longValue());
+            rentalReturnItemsDTO.setFromDate(item.get("fromDate").toString());
+            rentalReturnItemsDTO.setToDate(item.get("toDate").toString());
+            rentalReturnItemsDTO.setOrderDate(item.get("orderDate").toString());
+            rentalReturnItemsDTO.setStatus((String) item.get("status"));
+            rentalItemsList.add(rentalReturnItemsDTO);
         }
         return rentalItemsList;
     }
 
-    public List<RentalItemsDTO> getAllItemsInventoryWithUserId(Long userId) {
+    public List<RentalReturnItemsDTO> getAllRentedItemsWithUserId(Long userId) {
         List<Map<String, Object>> rentItemsList = rentalItemsRepository.getRentalItemsWithUserId(userId);
-        List<RentalItemsDTO> rentalItemsList = new ArrayList<>();
+        List<RentalReturnItemsDTO> rentalItemsList = new ArrayList<>();
         for (Map<String, Object> item : rentItemsList) {
-            RentalItemsDTO rentalItemsDTO = new RentalItemsDTO();
-            rentalItemsDTO.setItemName((String) item.get("itemName"));
-            rentalItemsDTO.setItemSize((String) item.get("itemSize"));
-            rentalItemsDTO.setItemPrice(((Integer) item.get("itemPrice")).longValue());
-            rentalItemsDTO.setOrderNumber((String) item.get("orderNumber"));
-            rentalItemsDTO.setPenaltyAmount(((Integer) item.get("penaltyAmount")).longValue());
-            rentalItemsDTO.setQuantity(((Integer) item.get("quantity")).longValue());
-            rentalItemsDTO.setFromDate(item.get("fromDate").toString());
-            rentalItemsDTO.setToDate(item.get("toDate").toString());
-            rentalItemsDTO.setOrderDate(item.get("orderDate").toString());
-            rentalItemsDTO.setStatus((String) item.get("status"));
-            rentalItemsList.add(rentalItemsDTO);
+            RentalReturnItemsDTO rentalReturnItemsDTO = new RentalReturnItemsDTO();
+            rentalReturnItemsDTO.setItemName((String) item.get("itemName"));
+            rentalReturnItemsDTO.setItemSize((String) item.get("itemSize"));
+            rentalReturnItemsDTO.setItemPrice(((Integer) item.get("itemPrice")).longValue());
+            rentalReturnItemsDTO.setOrderNumber((String) item.get("orderNumber"));
+            rentalReturnItemsDTO.setPenaltyAmount(((Integer) item.get("penaltyAmount")).longValue());
+            rentalReturnItemsDTO.setQuantity(((Integer) item.get("quantity")).longValue());
+            rentalReturnItemsDTO.setFromDate(item.get("fromDate").toString());
+            rentalReturnItemsDTO.setToDate(item.get("toDate").toString());
+            rentalReturnItemsDTO.setOrderDate(item.get("orderDate").toString());
+            rentalReturnItemsDTO.setStatus((String) item.get("status"));
+            rentalItemsList.add(rentalReturnItemsDTO);
         }
         return rentalItemsList;
+    }
+
+    public CustomResponseDto saveReturnedItems(Long rentalId) throws ResourceNotFoundException {
+        CustomResponseDto customResponseDto = new CustomResponseDto();
+        RentalItems rentalItems = rentalItemsRepository.findById(rentalId).
+                orElseThrow(() -> new ResourceNotFoundException("Rental item not found for this id :: " + rentalId));
+        ReturnItems returnItems = modelMapper.map(rentalItems,ReturnItems.class);
+        returnItemsRepository.save(returnItems);
+        rentalItemsRepository.delete(rentalItems);
+        customResponseDto.setResponseCode("200");
+        customResponseDto.setMessage("Rented Item move successfully into returned items stock");
+        return customResponseDto;
     }
 }

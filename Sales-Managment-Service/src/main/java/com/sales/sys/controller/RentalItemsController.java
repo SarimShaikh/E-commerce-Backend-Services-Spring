@@ -1,6 +1,8 @@
 package com.sales.sys.controller;
 
-import com.sales.sys.messageDTO.RentalItemsDTO;
+import com.sales.sys.exceptions.ResourceNotFoundException;
+import com.sales.sys.messageDTO.CustomResponseDto;
+import com.sales.sys.messageDTO.RentalReturnItemsDTO;
 import com.sales.sys.services.RentalItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,13 +24,19 @@ public class RentalItemsController {
 
     @GetMapping("/rental-items")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<RentalItemsDTO> getAllItemsInventory() {
-        return rentalItemsService.getAllItemsInventory();
+    public List<RentalReturnItemsDTO> getAllItemsInventory() {
+        return rentalItemsService.getAllRentedItems();
     }
 
     @GetMapping("/user-rental-items/{userId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public List<RentalItemsDTO> getAllItemsInventoryWithUserId(@PathVariable(value = "userId") Long userId) {
-        return rentalItemsService.getAllItemsInventoryWithUserId(userId);
+    public List<RentalReturnItemsDTO> getAllItemsInventoryWithUserId(@PathVariable(value = "userId") Long userId) {
+        return rentalItemsService.getAllRentedItemsWithUserId(userId);
+    }
+
+    @DeleteMapping("/delete-rental-item/{rentalId}")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public CustomResponseDto deleteItemWithDetails(@PathVariable(value = "rentalId") Long rentalId) throws ResourceNotFoundException {
+        return rentalItemsService.saveReturnedItems(rentalId);
     }
 }
