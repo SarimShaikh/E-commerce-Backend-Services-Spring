@@ -15,10 +15,16 @@ import com.sales.sys.repositories.RentalItemsRepository;
 import com.sales.sys.services.apicall.RestPaymentApi;
 import com.sales.sys.utils.UtilsClass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderService {
@@ -87,6 +93,17 @@ public class OrderService {
         return customResponseDto;
     }
 
+    public Map<String, Object> getAllOrders(String orderNum, int page, int size) {
+        Map<String, Object> response = new HashMap<>();
+        Pageable paging = PageRequest.of(page, size);
+        Page<Order> pageItem = orderNum != null ? orderRepository.getAllByOrderNumber(orderNum, paging) : orderRepository.findAll(paging);
+        List<Order> orders = pageItem.getContent();
+        response.put("orders", orders);
+        response.put("currentPage", pageItem.getNumber());
+        response.put("totalItems", pageItem.getTotalElements());
+        response.put("totalPages", pageItem.getTotalPages());
+        return response;
+    }
 
     private String checkOrderNumber(String orderNum) {
         Order order = orderRepository.findByOrderNumber(orderNum);

@@ -21,7 +21,7 @@ public class RentalItemsController {
     }
 
     @GetMapping("/rental-items")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<RentalItemsDTO> getAllItemsInventory() {
         return rentalItemsService.getAllItemsInventory();
     }

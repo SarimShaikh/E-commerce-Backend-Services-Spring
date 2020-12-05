@@ -1,6 +1,7 @@
 package com.sales.sys.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -15,6 +16,10 @@ public class OrderDetails implements Serializable {
     private Long quantity;
     private Long price;
     private Order order;
+    private Item item;
+
+    //extra fields to get parent details
+    private String itemName;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,7 +83,7 @@ public class OrderDetails implements Serializable {
     }
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "ORDER_ID" ,nullable = false , insertable = false , updatable = false)
+    @JoinColumn(name = "ORDER_ID", nullable = false, insertable = false, updatable = false)
     @JsonBackReference
     public Order getOrder() {
         return order;
@@ -86,5 +91,25 @@ public class OrderDetails implements Serializable {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "ITEM_ID", nullable = false, insertable = false, updatable = false)
+    @JsonBackReference
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    @org.springframework.data.annotation.Transient
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = item.getItemName();
     }
 }
