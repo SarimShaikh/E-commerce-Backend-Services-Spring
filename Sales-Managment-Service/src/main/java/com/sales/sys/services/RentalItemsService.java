@@ -34,6 +34,7 @@ public class RentalItemsService {
         List<RentalReturnItemsDTO> rentalItemsList = new ArrayList<>();
         for (Map<String, Object> item : rentItemsList) {
             RentalReturnItemsDTO rentalReturnItemsDTO = new RentalReturnItemsDTO();
+            rentalReturnItemsDTO.setRentalId(((Integer) item.get("rentalId")).longValue());
             rentalReturnItemsDTO.setItemName((String) item.get("itemName"));
             rentalReturnItemsDTO.setItemSize((String) item.get("itemSize"));
             rentalReturnItemsDTO.setItemPrice(((Integer) item.get("itemPrice")).longValue());

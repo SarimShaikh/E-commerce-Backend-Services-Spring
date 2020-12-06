@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class RentalItemsDTO implements Serializable {
 
+    private Long rentalId;
     private String itemName;
     private String itemSize;
     private Long itemPrice;
@@ -14,6 +15,14 @@ public class RentalItemsDTO implements Serializable {
     private String toDate;
     private String orderDate;
     private String status;
+
+    public Long getRentalId() {
+        return rentalId;
+    }
+
+    public void setRentalId(Long rentalId) {
+        this.rentalId = rentalId;
+    }
 
     public String getItemName() {
         return itemName;
