@@ -110,7 +110,7 @@ public class ItemController {
     @GetMapping("/get-category-items")
     //@PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public Map<String, Object> getAllItemsWithCategoryAndSubCategory(@RequestParam(name = "categoryId") Long categoryId,
-                                                                     @RequestParam(name = "subCategoryId") Long subCategoryId,
+                                                                     @RequestParam(required=false,name = "subCategoryId") Long subCategoryId,
                                                                      @RequestParam(defaultValue = "0") int page,
                                                                      @RequestParam(defaultValue = "5") int size) {
         return itemService.getAllItemsByCategoryIdAndSubCategoryId(categoryId, subCategoryId, page, size);
@@ -122,7 +122,7 @@ public class ItemController {
         // Load file as Resource
         Resource resource;
         try {
-            Path filePath = Paths.get("D://java-projects//e-commerce-backend-services//Inventory-Managment-Service//upload-images//" + fileName)
+            Path filePath = Paths.get("D://expenseapp//E-commerce-Backend-Services-Spring//Inventory-Managment-Service//upload-images//" + fileName)
                     .toAbsolutePath().normalize();
             resource = new UrlResource(filePath.toUri());
 
