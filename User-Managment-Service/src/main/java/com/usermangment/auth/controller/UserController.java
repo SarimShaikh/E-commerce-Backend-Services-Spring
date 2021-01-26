@@ -8,6 +8,7 @@ import com.usermangment.auth.exceptions.ResourceNotFoundException;
 import com.usermangment.auth.messageDto.request.AddPrivilegeRequest;
 import com.usermangment.auth.messageDto.request.LoginRequest;
 import com.usermangment.auth.messageDto.request.SignUpRequest;
+import com.usermangment.auth.messageDto.response.CustomResponseDTO;
 import com.usermangment.auth.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,12 @@ public class UserController {
     public ResponseEntity<String> UserRegistration(@Valid @RequestBody SignUpRequest signUpRequest) {
         return userService.registerUser(signUpRequest);
     }
+
+    @PostMapping("/mob-signup")
+    public CustomResponseDTO UserRegistrationMob(@Valid @RequestBody SignUpRequest signUpRequest) {
+        return userService.registerUsermob(signUpRequest);
+    }
+
 
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")

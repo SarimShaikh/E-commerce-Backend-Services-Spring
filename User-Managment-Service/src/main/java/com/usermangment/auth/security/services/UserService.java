@@ -5,6 +5,7 @@ import com.usermangment.auth.exceptions.ResourceNotFoundException;
 import com.usermangment.auth.messageDto.request.AddPrivilegeRequest;
 import com.usermangment.auth.messageDto.request.LoginRequest;
 import com.usermangment.auth.messageDto.request.SignUpRequest;
+import com.usermangment.auth.messageDto.response.CustomResponseDTO;
 import com.usermangment.auth.messageDto.response.JwtResponse;
 import com.usermangment.auth.repository.PrivilegeRepository;
 import com.usermangment.auth.repository.RoleRepository;
@@ -104,6 +105,51 @@ public class UserService {
         userRepository.save(user);
 
         return ResponseEntity.ok().body("User registered successfully!");
+    }
+
+    //serve request for mobile
+    public CustomResponseDTO registerUsermob(SignUpRequest signUpRequest) {
+        CustomResponseDTO customResponseDTO = new CustomResponseDTO();
+        if(userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return new CustomResponseDTO("208","Fail -> Username is already taken!");
+        }
+
+        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return new CustomResponseDTO("208","Fail -> Email is already in use!");
+        }
+
+        // Creating user's account
+        User user = new User(signUpRequest.getUsername(),
+                signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),signUpRequest.getContact(),(byte)1,signUpRequest.getIsCustomer());
+
+        Set<String> strRoles = signUpRequest.getRole();
+        Set<Role> roles = new HashSet<>();
+
+        strRoles.forEach(role -> {
+            switch(role) {
+                case "admin":
+                    Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                            .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                    roles.add(adminRole);
+
+                    break;
+                case "user":
+                    Role pmRole = roleRepository.findByName(RoleName.ROLE_USER)
+                            .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                    roles.add(pmRole);
+
+                    break;
+                default:
+                    throw new RuntimeException("Fail! -> Cause: User Role not find.");
+                    //roles.add(userRole);
+            }
+        });
+
+        user.setRoles(roles);
+        userRepository.save(user);
+        customResponseDTO.setResponseCode("200");
+        customResponseDTO.setMessage("registered successfully!");
+        return customResponseDTO;
     }
 
     public ResponseEntity<User> getEmployeeById(Long userId)
