@@ -15,6 +15,7 @@ import java.util.Collection;
 public class Item extends EntityBase<String> implements Serializable {
 
     private Long itemId;
+    private Long storeId;
     private Long companyId;
     private Long categoryId;
     private Long subCategoryId;
@@ -24,6 +25,7 @@ public class Item extends EntityBase<String> implements Serializable {
     private SubCategory subCategory;
     Collection<Images> images;
     Collection<ItemDetails> itemDetails;
+    private Stores stores;
     private Byte isActive;
 
     //extra fields to get parent details
@@ -40,6 +42,16 @@ public class Item extends EntityBase<String> implements Serializable {
 
     public void setItemId(Long itemId) {
         this.itemId = itemId;
+    }
+
+    @Basic
+    @Column(name = "STORE_ID", nullable = false)
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
     }
 
     @Basic
@@ -140,6 +152,17 @@ public class Item extends EntityBase<String> implements Serializable {
 
     public void setItemDetails(Collection<ItemDetails> itemDetails) {
         this.itemDetails = itemDetails;
+    }
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "STORE_ID" ,nullable = false , insertable = false , updatable = false)
+    @JsonIgnore
+    public Stores getStores() {
+        return stores;
+    }
+
+    public void setStores(Stores stores) {
+        this.stores = stores;
     }
 
     @org.springframework.data.annotation.Transient
