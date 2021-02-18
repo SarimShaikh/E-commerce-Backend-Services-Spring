@@ -103,7 +103,7 @@ public class ItemController {
     //@PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public Map<String, Object> getAllItems(@RequestParam(required = false) String itemName,
                                            @RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "5") int size) {
+                                           @RequestParam(defaultValue = "10") int size) {
         return itemService.getAllItems(itemName, page, size);
     }
 
@@ -112,10 +112,16 @@ public class ItemController {
     public Map<String, Object> getAllItemsWithCategoryAndSubCategory(@RequestParam(name = "categoryId") Long categoryId,
                                                                      @RequestParam(required=false,name = "subCategoryId") Long subCategoryId,
                                                                      @RequestParam(defaultValue = "0") int page,
-                                                                     @RequestParam(defaultValue = "5") int size) {
+                                                                     @RequestParam(defaultValue = "10") int size) {
         return itemService.getAllItemsByCategoryIdAndSubCategoryId(categoryId, subCategoryId, page, size);
     }
 
+    @GetMapping("/get-store-items")
+    public Map<String, Object> getAllItemsWithStoreId(@RequestParam(name = "storeId") Long storeId,
+                                                                      @RequestParam(defaultValue = "0") int page,
+                                                                     @RequestParam(defaultValue = "10") int size) {
+        return itemService.getAllItemsBystoreId(storeId, page, size);
+    }
 
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws Exception {

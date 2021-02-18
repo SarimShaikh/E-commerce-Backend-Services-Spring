@@ -12,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8082"})
@@ -55,5 +57,10 @@ public class StoresController {
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public CustomResponseDto deleteItemWithDetails(@PathVariable(value = "storeId") Long storeId) throws ResourceNotFoundException {
         return storesService.deleteStore(storeId);
+    }
+
+    @GetMapping("/get-stores")
+    public List<Stores> getAllStores(){
+        return storesService.getAllStores();
     }
 }

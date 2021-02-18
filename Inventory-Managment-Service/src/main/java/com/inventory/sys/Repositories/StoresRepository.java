@@ -6,13 +6,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface StoresRepository extends JpaRepository<Stores, Long> {
     boolean existsByStoreName(String storeName);
 
     boolean existsByStoreRegistrationNumber(String registrationNumber);
 
-    Page<Stores> getAllByStoreNameStartsWith(String storeName, Pageable pageable);
+    List<Stores> getAllByStoreNameStartsWith(String storeName, Pageable pageable);
 
     Stores findStoresByUserId(Long userId);
 

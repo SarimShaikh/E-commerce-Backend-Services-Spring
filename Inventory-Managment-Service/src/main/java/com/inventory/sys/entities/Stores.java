@@ -19,7 +19,6 @@ public class Stores extends EntityBase<String> implements Serializable {
     private String storeContact;
     private String storeAddress;
     private String imagePath;
-    private Collection<Item> items;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,7 +81,7 @@ public class Stores extends EntityBase<String> implements Serializable {
     }
 
     @Basic
-    @Column(name = "IMAGE", nullable = false)
+    @Column(name = "IMAGE")
     public String getImagePath() {
         return imagePath;
     }
@@ -91,12 +90,4 @@ public class Stores extends EntityBase<String> implements Serializable {
         this.imagePath = imagePath;
     }
 
-    @OneToMany(mappedBy = "stores", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public Collection<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(Collection<Item> items) {
-        this.items = items;
-    }
 }

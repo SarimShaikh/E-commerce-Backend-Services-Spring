@@ -96,7 +96,7 @@ public class Item extends EntityBase<String> implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "COMPANY_ID" ,nullable = false , insertable = false , updatable = false)
-    @JsonIgnore
+    @JsonBackReference
     public Company getCompany() {
         return company;
     }

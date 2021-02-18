@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -79,13 +81,12 @@ public class StoresService {
             throw new ResourceNotFoundException("Store Already Exists with that name!");
         }
 
-        if (storesRepository.existsByStoreRegistrationNumber(stores.getStoreRegistrationNumber())) {
-            customResponseDto.setResponseCode("401");
-            customResponseDto.setMessage("Store Already Exists with that Registration number!");
-            throw new ResourceNotFoundException("Store Already Exists with that Registration number!");
-        }
+        stores1.setStoreName(stores.getStoreName());
+        stores1.setStoreRegistrationNumber(stores.getStoreRegistrationNumber());
+        stores1.setStoreContact(stores.getStoreContact());
+        stores1.setStoreAddress(stores.getStoreAddress());
 
-        final Stores updatedStore = storesRepository.save(stores);
+        final Stores updatedStore = storesRepository.save(stores1);
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Store Updated Successfully");
         customResponseDto.setEntityClass(updatedStore);
@@ -103,4 +104,12 @@ public class StoresService {
         return customResponseDto;
     }
 
+    public List<Stores> getAllStores() {
+        List<Stores> storesList = storesRepository.findAll();
+        for (int i = 0; i < storesList.size(); i++) {
+            String path = downloadUrl+storesList.get(i).getImagePath();
+            storesList.get(i).setImagePath(path);
+        }
+        return storesList;
+    }
 }

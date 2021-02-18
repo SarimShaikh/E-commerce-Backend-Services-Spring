@@ -249,4 +249,32 @@ public class ItemService {
         return response;
     }
 
+    public Map<String, Object> getAllItemsBystoreId(Long storeId, int page, int size) {
+        Map<String, Object> response = new HashMap<>();
+        Pageable paging = PageRequest.of(page, size);
+        Page<Item> pageItem = itemRepository.getAllByStoreId(storeId, paging);
+        List<Item> items = pageItem.getContent();
+        List<Images> imagesList;
+        Collection<Images> images;
+        for (Item item : items) {
+            imagesList = new ArrayList<>();
+            images = item.getImages();
+            for (Images img : images) {
+                Images images1 = new Images();
+                images1.setItemId(img.getItemId());
+                images1.setImageId(img.getImageId());
+                images1.setImagePath(downloadUrl + img.getImagePath());
+                imagesList.add(images1);
+            }
+            item.setImages(imagesList);
+
+        }
+        response.put("items", items);
+        response.put("currentPage", pageItem.getNumber());
+        response.put("totalItems", pageItem.getTotalElements());
+        response.put("totalPages", pageItem.getTotalPages());
+
+        return response;
+    }
+
 }
