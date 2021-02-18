@@ -1,13 +1,7 @@
 package com.inventory.sys.services;
 
-import com.inventory.sys.Repositories.ImagesRepository;
-import com.inventory.sys.Repositories.InventoryDetailRepository;
-import com.inventory.sys.Repositories.ItemDetailsRepository;
-import com.inventory.sys.Repositories.ItemRepository;
-import com.inventory.sys.entities.Images;
-import com.inventory.sys.entities.InventoryDetail;
-import com.inventory.sys.entities.Item;
-import com.inventory.sys.entities.ItemDetails;
+import com.inventory.sys.Repositories.*;
+import com.inventory.sys.entities.*;
 import com.inventory.sys.exceptions.CustomResponseDto;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.messageDTO.ItemDetailsDTO;
@@ -35,16 +29,18 @@ public class ItemService {
     private ImagesRepository imagesRepository;
     private ItemDetailsRepository itemDetailsRepository;
     private InventoryDetailRepository inventoryDetailRepository;
+    private StoresRepository storesRepository;
     private String filePath;
     private String downloadUrl;
 
     @Autowired
     public ItemService(ItemRepository itemRepository, ImagesRepository imagesRepository, ItemDetailsRepository itemDetailsRepository,
-                       InventoryDetailRepository inventoryDetailRepository, @Value("${image.download.path}") String url, @Value("${images.path}") String imgPath) {
+                       InventoryDetailRepository inventoryDetailRepository, StoresRepository storesRepository, @Value("${image.download.path}") String url, @Value("${images.path}") String imgPath) {
         this.itemRepository = itemRepository;
         this.imagesRepository = imagesRepository;
         this.itemDetailsRepository = itemDetailsRepository;
         this.inventoryDetailRepository = inventoryDetailRepository;
+        this.storesRepository = storesRepository;
         this.downloadUrl = url;
         this.filePath = imgPath;
     }
@@ -71,13 +67,16 @@ public class ItemService {
 
     public CustomResponseDto addItem(ItemRequestDTO itemRequestDTO) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
+
         if (itemRepository.existsByItemName(itemRequestDTO.getItemName())) {
             customResponseDto.setResponseCode("401");
             customResponseDto.setMessage("Item Already Exists with that name!");
             throw new ResourceNotFoundException("Item Already Exists with that name!");
         }
 
+        Stores stores = storesRepository.findStoresByUserId(itemRequestDTO.getUserId());
         Item item = new Item();
+        item.setStoreId(stores.getStoreId());
         item.setCompanyId(itemRequestDTO.getCompanyId());
         item.setCategoryId(itemRequestDTO.getCategoryId());
         item.setSubCategoryId(itemRequestDTO.getSubCategoryId());
@@ -117,7 +116,6 @@ public class ItemService {
 
     public CustomResponseDto updateItem(ItemRequestDTO itemRequestDTO) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
-
         Item item = itemRepository.findById(itemRequestDTO.getItemId()).
                 orElseThrow(() -> new ResourceNotFoundException("Item not found for this id :: " + itemRequestDTO.getItemId()));
 
