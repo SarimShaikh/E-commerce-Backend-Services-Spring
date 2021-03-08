@@ -25,7 +25,7 @@ public class StoresService {
     private String downloadUrl;
 
     @Autowired
-    public StoresService(StoresRepository storesRepository, @Value("${image.download.path}") String url, @Value("${images.path}") String imgPath) {
+    public StoresService(StoresRepository storesRepository, @Value("${image.download.mob.path}") String url, @Value("${images.path}") String imgPath) {
         this.storesRepository = storesRepository;
         this.filePath = imgPath;
         this.downloadUrl = url;
