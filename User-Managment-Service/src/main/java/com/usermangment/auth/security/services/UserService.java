@@ -111,11 +111,11 @@ public class UserService {
     public CustomResponseDTO registerUsermob(SignUpRequest signUpRequest) {
         CustomResponseDTO customResponseDTO = new CustomResponseDTO();
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new CustomResponseDTO("208","Fail -> Username is already taken!");
+            return new CustomResponseDTO("Fail -> Username is already taken!","208");
         }
 
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new CustomResponseDTO("208","Fail -> Email is already in use!");
+            return new CustomResponseDTO("Fail -> Username is already taken!","208");
         }
 
         // Creating user's account
