@@ -128,7 +128,7 @@ public class ItemController {
         // Load file as Resource
         Resource resource;
         try {
-            Path filePath = Paths.get("D://java-projects//e-commerce-backend-services//Inventory-Managment-Service//upload-images//" + fileName)
+            Path filePath = Paths.get("D://java-projects//E-commerce-Backend-Services-Spring//Inventory-Managment-Service//upload-images//" + fileName)
                     .toAbsolutePath().normalize();
             resource = new UrlResource(filePath.toUri());
 
