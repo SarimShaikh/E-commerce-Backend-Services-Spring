@@ -20,7 +20,7 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8087"})
 @RequestMapping("/api/v1/auth")
 public class UserController {
 
@@ -53,7 +53,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<User> updateUser(@PathVariable(value = "userId") Long userId, @Valid @RequestBody User userDetails)
             throws ResourceNotFoundException {
-        return userService.updateUser(userId,userDetails);
+        return userService.updateUser(userId, userDetails);
     }
 
     @DeleteMapping("/delete-user/{userId}")
@@ -65,26 +65,26 @@ public class UserController {
 
     @GetMapping("/user/all/{isCustomer}")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<User> getAllUserByType(@PathVariable(value = "isCustomer") String isCustomer){
+    public List<User> getAllUserByType(@PathVariable(value = "isCustomer") String isCustomer) {
         return userService.getUserByType(isCustomer);
     }
 
     @GetMapping("/user/privileges")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<Privilege> getAllPrivilege(){
+    public List<Privilege> getAllPrivilege() {
         return userService.privilegeList();
     }
 
     @GetMapping("/user/role-privileges")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Role> getPrivilegesByRoleName(@RequestParam(name = "roleName") String roleName) throws ResourceNotFoundException{
-        RoleName roleEnum= RoleName.valueOf(roleName);
+    public ResponseEntity<Role> getPrivilegesByRoleName(@RequestParam(name = "roleName") String roleName) throws ResourceNotFoundException {
+        RoleName roleEnum = RoleName.valueOf(roleName);
         return userService.getRoleByName(roleEnum);
     }
 
     @PostMapping("/assign/privileges")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> addRolePrivileges(@Valid @RequestBody AddPrivilegeRequest privilegeRequest) throws ResourceNotFoundException{
+    public ResponseEntity<String> addRolePrivileges(@Valid @RequestBody AddPrivilegeRequest privilegeRequest) throws ResourceNotFoundException {
         return userService.addRolePrivileges(privilegeRequest);
     }
 }

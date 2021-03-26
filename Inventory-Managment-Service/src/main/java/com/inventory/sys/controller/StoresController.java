@@ -24,7 +24,7 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8082"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8082", "http://localhost:8087"})
 @RequestMapping("/api/v1/inventory")
 public class StoresController {
 
@@ -68,7 +68,7 @@ public class StoresController {
     }
 
     @GetMapping("/get-stores")
-    public List<Stores> getAllStores(){
+    public List<Stores> getAllStores() {
         return storesService.getAllStores();
     }
 }

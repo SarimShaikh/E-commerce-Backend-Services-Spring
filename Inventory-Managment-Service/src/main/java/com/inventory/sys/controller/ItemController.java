@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8082"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8082", "http://localhost:8087"})
 @RequestMapping("/api/v1/inventory")
 public class ItemController {
 
@@ -110,7 +110,7 @@ public class ItemController {
     @GetMapping("/get-category-items")
     //@PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public Map<String, Object> getAllItemsWithCategoryAndSubCategory(@RequestParam(name = "categoryId") Long categoryId,
-                                                                     @RequestParam(required=false,name = "subCategoryId") Long subCategoryId,
+                                                                     @RequestParam(required = false, name = "subCategoryId") Long subCategoryId,
                                                                      @RequestParam(defaultValue = "0") int page,
                                                                      @RequestParam(defaultValue = "10") int size) {
         return itemService.getAllItemsByCategoryIdAndSubCategoryId(categoryId, subCategoryId, page, size);
@@ -118,8 +118,8 @@ public class ItemController {
 
     @GetMapping("/get-store-items")
     public Map<String, Object> getAllItemsWithStoreId(@RequestParam(name = "storeId") Long storeId,
-                                                                      @RequestParam(defaultValue = "0") int page,
-                                                                     @RequestParam(defaultValue = "10") int size) {
+                                                      @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size) {
         return itemService.getAllItemsBystoreId(storeId, page, size);
     }
 
