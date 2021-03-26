@@ -42,7 +42,6 @@ public class UserController {
         return userService.registerUsermob(signUpRequest);
     }
 
-
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<User> getUserById(@PathVariable(value = "userId") Long userId)

@@ -27,6 +27,9 @@ public class SignUpRequest {
     @Size(min = 3, max = 50)
     private String contact;
 
+    @Size(min = 5, max = 200)
+    private String address;
+
     @NotNull
     private String isCustomer;
 
@@ -76,5 +79,13 @@ public class SignUpRequest {
 
     public void setIsCustomer(String isCustomer) {
         this.isCustomer = isCustomer;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

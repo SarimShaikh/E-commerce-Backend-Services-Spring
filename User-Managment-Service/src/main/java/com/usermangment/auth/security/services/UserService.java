@@ -76,7 +76,7 @@ public class UserService {
 
         // Creating user's account
         User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),signUpRequest.getContact(),(byte)1,signUpRequest.getIsCustomer());
+                signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),signUpRequest.getContact(),signUpRequest.getAddress(),(byte)1,signUpRequest.getIsCustomer());
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -120,7 +120,7 @@ public class UserService {
 
         // Creating user's account
         User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),signUpRequest.getContact(),(byte)1,signUpRequest.getIsCustomer());
+                signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()),signUpRequest.getContact(),signUpRequest.getAddress(),(byte)1,signUpRequest.getIsCustomer());
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
