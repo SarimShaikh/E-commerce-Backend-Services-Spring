@@ -58,6 +58,11 @@ public class StoresController {
         return storesService.deleteStore(storeId);
     }
 
+    @GetMapping("/get-user-store/{userId}")
+    public List<Stores> getStoreByUserId(@PathVariable(value = "userId") Long userId) {
+        return storesService.getAllStores();
+    }
+
     @GetMapping("/get-stores")
     public List<Stores> getAllStores() {
         return storesService.getAllStores();

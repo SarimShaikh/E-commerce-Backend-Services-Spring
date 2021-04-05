@@ -104,6 +104,10 @@ public class StoresService {
         return customResponseDto;
     }
 
+    public Stores getStoreByUserId(Long userId){
+        return storesRepository.findStoresByUserId(userId);
+    }
+
     public List<Stores> getAllStores() {
         List<Stores> storesList = storesRepository.findAll();
         for (int i = 0; i < storesList.size(); i++) {
