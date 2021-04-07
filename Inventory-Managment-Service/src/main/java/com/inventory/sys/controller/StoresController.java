@@ -59,8 +59,8 @@ public class StoresController {
     }
 
     @GetMapping("/get-user-store/{userId}")
-    public List<Stores> getStoreByUserId(@PathVariable(value = "userId") Long userId) {
-        return storesService.getAllStores();
+    public Stores getStoreByUserId(@PathVariable(value = "userId") Long userId) {
+        return storesService.getStoreByUserId(userId);
     }
 
     @GetMapping("/get-stores")
