@@ -3,6 +3,7 @@ package com.inventory.sys.services;
 import com.inventory.sys.Repositories.StoresRepository;
 import com.inventory.sys.entities.Stores;
 import com.inventory.sys.exceptions.CustomResponseDto;
+import com.inventory.sys.exceptions.ResourceExistsException;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.utils.UtilsClass;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,19 +48,19 @@ public class StoresService {
         }
     }
 
-    public CustomResponseDto addStore(Stores stores) throws ResourceNotFoundException {
+    public CustomResponseDto addStore(Stores stores) throws ResourceExistsException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
 
         if (storesRepository.existsByStoreName(stores.getStoreName())) {
             customResponseDto.setResponseCode("401");
             customResponseDto.setMessage("Store Already Exists with that name!");
-            throw new ResourceNotFoundException("Store Already Exists with that name!");
+            throw new ResourceExistsException("Store Already Exists with that name!");
         }
 
         if (storesRepository.existsByStoreRegistrationNumber(stores.getStoreRegistrationNumber())) {
             customResponseDto.setResponseCode("401");
             customResponseDto.setMessage("Store Already Exists with that Registration number!");
-            throw new ResourceNotFoundException("Store Already Exists with that Registration number!");
+            throw new ResourceExistsException("Store Already Exists with that Registration number!");
         }
 
         final Stores stores1 = storesRepository.save(stores);
@@ -69,7 +70,7 @@ public class StoresService {
         return customResponseDto;
     }
 
-    public CustomResponseDto updateStore(Stores stores) throws ResourceNotFoundException {
+    public CustomResponseDto updateStore(Stores stores) throws Exception {
         CustomResponseDto customResponseDto = new CustomResponseDto();
 
         Stores stores1 = storesRepository.findById(stores.getStoreId()).
@@ -78,7 +79,7 @@ public class StoresService {
         if (storesRepository.existsByStoreName(stores.getStoreName())) {
             customResponseDto.setResponseCode("401");
             customResponseDto.setMessage("Store Already Exists with that name!");
-            throw new ResourceNotFoundException("Store Already Exists with that name!");
+            throw new ResourceExistsException("Store Already Exists with that name!");
         }
 
         stores1.setStoreName(stores.getStoreName());

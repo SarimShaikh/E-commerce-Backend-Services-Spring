@@ -1,6 +1,7 @@
 package com.inventory.sys.controller;
 
 import com.inventory.sys.exceptions.CustomResponseDto;
+import com.inventory.sys.exceptions.ResourceExistsException;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.exceptions.ResponseMessage;
 import com.inventory.sys.messageDTO.ItemRequestDTO;
@@ -59,7 +60,7 @@ public class ItemController {
 
     @PostMapping("/add-item")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public CustomResponseDto addItem(@RequestBody ItemRequestDTO itemRequestDTO) throws ResourceNotFoundException {
+    public CustomResponseDto addItem(@RequestBody ItemRequestDTO itemRequestDTO) throws ResourceExistsException {
         return itemService.addItem(itemRequestDTO);
     }
 

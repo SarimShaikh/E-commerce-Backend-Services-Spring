@@ -2,6 +2,7 @@ package com.inventory.sys.controller;
 
 import com.inventory.sys.entities.Company;
 import com.inventory.sys.exceptions.CustomResponseDto;
+import com.inventory.sys.exceptions.ResourceExistsException;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class CompanyController {
 
     @PostMapping("/add-company")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public CustomResponseDto addCompany(@RequestBody Company company) {
+    public CustomResponseDto addCompany(@RequestBody Company company) throws ResourceExistsException {
         return companyService.addCompany(company);
     }
 

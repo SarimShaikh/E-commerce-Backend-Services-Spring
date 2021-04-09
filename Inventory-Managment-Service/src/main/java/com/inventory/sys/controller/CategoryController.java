@@ -2,6 +2,7 @@ package com.inventory.sys.controller;
 
 import com.inventory.sys.entities.Category;
 import com.inventory.sys.exceptions.CustomResponseDto;
+import com.inventory.sys.exceptions.ResourceExistsException;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.messageDTO.CategoryRequestDTO;
 import com.inventory.sys.services.CategoryService;
@@ -25,13 +26,13 @@ public class CategoryController {
 
     @PostMapping("/add-category")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public CustomResponseDto addCategory(@RequestBody Category category) throws ResourceNotFoundException {
+    public CustomResponseDto addCategory(@RequestBody Category category) throws ResourceExistsException {
         return categoryService.addCategory(category);
     }
 
     @PostMapping("/add-sub-category")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public CustomResponseDto addSubCategory(@RequestBody Category category) throws ResourceNotFoundException {
+    public CustomResponseDto addSubCategory(@RequestBody Category category) throws Exception {
         return categoryService.addSubCategory(category);
     }
 

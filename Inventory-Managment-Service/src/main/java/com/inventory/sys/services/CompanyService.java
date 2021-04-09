@@ -3,6 +3,7 @@ package com.inventory.sys.services;
 import com.inventory.sys.Repositories.CompanyRepository;
 import com.inventory.sys.entities.Company;
 import com.inventory.sys.exceptions.CustomResponseDto;
+import com.inventory.sys.exceptions.ResourceExistsException;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +20,12 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
-    public CustomResponseDto addCompany(Company company) {
+    public CustomResponseDto addCompany(Company company) throws ResourceExistsException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
-        if(companyRepository.existsByCompanyName(company.getCompanyName())){
-            customResponseDto.setResponseCode("401");
-            customResponseDto.setMessage("Company Already Existx with that name!");
+        if (companyRepository.existsByCompanyName(company.getCompanyName())) {
+            throw new ResourceExistsException("Company Already Exists with that name!");
         }
-        company.setIsActive((byte)1);
+        company.setIsActive((byte) 1);
         final Company company1 = companyRepository.save(company);
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Company added successfully");
@@ -33,7 +33,7 @@ public class CompanyService {
         return customResponseDto;
     }
 
-    public CustomResponseDto updateCompany(Long companyId, Company companyReq)throws ResourceNotFoundException {
+    public CustomResponseDto updateCompany(Long companyId, Company companyReq) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + companyReq.getCompanyId()));
@@ -51,7 +51,7 @@ public class CompanyService {
         return customResponseDto;
     }
 
-    public CustomResponseDto deleteCompany(Long companyId) throws ResourceNotFoundException{
+    public CustomResponseDto deleteCompany(Long companyId) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + companyId));
@@ -61,7 +61,7 @@ public class CompanyService {
         return customResponseDto;
     }
 
-    public List<Company> getAllCompanies(){
+    public List<Company> getAllCompanies() {
         return companyRepository.findAll();
     }
 }

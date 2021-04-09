@@ -2,6 +2,7 @@ package com.inventory.sys.controller;
 
 import com.inventory.sys.entities.Stores;
 import com.inventory.sys.exceptions.CustomResponseDto;
+import com.inventory.sys.exceptions.ResourceExistsException;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.exceptions.ResponseMessage;
 import com.inventory.sys.services.StoresService;
@@ -42,13 +43,13 @@ public class StoresController {
 
     @PostMapping("/add-store")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public CustomResponseDto addItem(@RequestBody Stores stores) throws ResourceNotFoundException {
+    public CustomResponseDto addItem(@RequestBody Stores stores) throws ResourceExistsException {
         return storesService.addStore(stores);
     }
 
     @PutMapping("/update-store")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public CustomResponseDto updateItem(@RequestBody Stores stores) throws ResourceNotFoundException {
+    public CustomResponseDto updateItem(@RequestBody Stores stores) throws Exception {
         return storesService.updateStore(stores);
     }
 

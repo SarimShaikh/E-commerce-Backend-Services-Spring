@@ -5,6 +5,7 @@ import com.inventory.sys.Repositories.SubCategoryReposiotry;
 import com.inventory.sys.entities.Category;
 import com.inventory.sys.entities.SubCategory;
 import com.inventory.sys.exceptions.CustomResponseDto;
+import com.inventory.sys.exceptions.ResourceExistsException;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.messageDTO.CategoryRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,12 @@ public class CategoryService {
         this.subCategoryReposiotry = subCategoryReposiotry;
     }
 
-    public CustomResponseDto addCategory(Category category) throws ResourceNotFoundException {
+    public CustomResponseDto addCategory(Category category) throws ResourceExistsException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
         if(categoryRepository.existsByCategoryType(category.getCategoryType())){
             customResponseDto.setResponseCode("401");
             customResponseDto.setMessage("Category Already Exists with that name!");
-            throw  new ResourceNotFoundException("Category Already Exists with that name!");
+            throw  new ResourceExistsException("Category Already Exists with that name!");
         }
 
         category.setIsActive((byte)1);
@@ -41,14 +42,14 @@ public class CategoryService {
         return customResponseDto;
     }
 
-    public CustomResponseDto addSubCategory(Category category) throws ResourceNotFoundException {
+    public CustomResponseDto addSubCategory(Category category) throws Exception {
         CustomResponseDto customResponseDto = new CustomResponseDto();
 
         for(SubCategory item : category.getSubCategories()){
             if(subCategoryReposiotry.existsBySubCategoryType(item.getSubCategoryType())){
                 customResponseDto.setResponseCode("401");
                 customResponseDto.setMessage("SubCategory Already Exists with that name!");
-                throw  new ResourceNotFoundException("Fail! -> SubCategory Already Exists with that name!");
+                throw  new ResourceExistsException("Fail! -> SubCategory Already Exists with that name!");
             }
         }
         Category category1 = categoryRepository.findById(category.getCategoryId()).
@@ -102,7 +103,7 @@ public class CategoryService {
     public CustomResponseDto deleteCategory(Long categoryId) throws ResourceNotFoundException{
         CustomResponseDto customResponseDto = new CustomResponseDto();
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found for this id :: " + categoryId));
         categoryRepository.delete(category);
         subCategoryReposiotry.deleteAllByCategoryId(categoryId);
         customResponseDto.setResponseCode("200");

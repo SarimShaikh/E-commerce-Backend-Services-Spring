@@ -3,6 +3,7 @@ package com.inventory.sys.services;
 import com.inventory.sys.Repositories.*;
 import com.inventory.sys.entities.*;
 import com.inventory.sys.exceptions.CustomResponseDto;
+import com.inventory.sys.exceptions.ResourceExistsException;
 import com.inventory.sys.exceptions.ResourceNotFoundException;
 import com.inventory.sys.messageDTO.ItemDetailsDTO;
 import com.inventory.sys.messageDTO.ItemRequestDTO;
@@ -65,13 +66,13 @@ public class ItemService {
         }
     }
 
-    public CustomResponseDto addItem(ItemRequestDTO itemRequestDTO) throws ResourceNotFoundException {
+    public CustomResponseDto addItem(ItemRequestDTO itemRequestDTO) throws ResourceExistsException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
 
         if (itemRepository.existsByItemName(itemRequestDTO.getItemName())) {
             customResponseDto.setResponseCode("401");
             customResponseDto.setMessage("Item Already Exists with that name!");
-            throw new ResourceNotFoundException("Item Already Exists with that name!");
+            throw new ResourceExistsException("Item Already Exists with that name!");
         }
 
         Stores stores = storesRepository.findStoresByUserId(itemRequestDTO.getUserId());
