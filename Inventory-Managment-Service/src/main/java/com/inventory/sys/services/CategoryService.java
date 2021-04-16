@@ -70,9 +70,9 @@ public class CategoryService {
     }
 
     @Transactional
-    public CustomResponseDto updateCategory(Long categoryId, CategoryRequestDTO categoryRequestDto) throws ResourceNotFoundException {
+    public CustomResponseDto updateCategory(CategoryRequestDTO categoryRequestDto) throws ResourceNotFoundException {
         CustomResponseDto customResponseDto = new CustomResponseDto();
-        Category category = categoryRepository.findById(categoryId).
+        Category category = categoryRepository.findById(categoryRequestDto.getCategoryId()).
                 orElseThrow(() -> new ResourceNotFoundException("Category not found for this id :: " + categoryRequestDto.getCategoryId()));
 
         category.setCategoryType(categoryRequestDto.getCategoryType());

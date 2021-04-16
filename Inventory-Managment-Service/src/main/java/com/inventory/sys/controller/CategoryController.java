@@ -40,7 +40,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public CustomResponseDto updateCategory(@RequestBody CategoryRequestDTO categoryRequestDto) throws ResourceNotFoundException {
         Long categoryId = categoryRequestDto.getCategoryId();
-        return categoryService.updateCategory(categoryId,categoryRequestDto);
+        return categoryService.updateCategory(categoryRequestDto);
     }
 
     @PutMapping("/update-Subcategory")
