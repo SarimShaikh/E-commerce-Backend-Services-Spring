@@ -24,12 +24,13 @@ public class StoresService {
     private StoresRepository storesRepository;
     private String filePath;
     private String downloadUrl;
-
+    private String downloadWebUrl;
     @Autowired
-    public StoresService(StoresRepository storesRepository, @Value("${image.download.mob.path}") String url, @Value("${images.path}") String imgPath) {
+    public StoresService(StoresRepository storesRepository, @Value("${image.download.mob.path}") String url, @Value("${images.path}") String imgPath, @Value("${image.download.path}") String downloadWebUrl) {
         this.storesRepository = storesRepository;
         this.filePath = imgPath;
         this.downloadUrl = url;
+        this.downloadWebUrl = downloadWebUrl;
     }
 
     public void saveStoreImage(MultipartFile file, Long storeId) {
@@ -106,7 +107,9 @@ public class StoresService {
     }
 
     public Stores getStoreByUserId(Long userId){
-        return storesRepository.findStoresByUserId(userId);
+        Stores stores = storesRepository.findStoresByUserId(userId);
+        stores.setImagePath(downloadWebUrl + stores.getImagePath());
+        return stores;
     }
 
     public List<Stores> getAllStores() {
