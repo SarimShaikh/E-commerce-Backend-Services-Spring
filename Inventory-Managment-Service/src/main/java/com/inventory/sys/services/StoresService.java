@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +42,11 @@ public class StoresService {
 
             Stores store = storesRepository.findById(storeId).
                     orElseThrow(() -> new ResourceNotFoundException("Store not found for this id :: " + storeId));
+            if(store.getImagePath()!=null){
+                String path = filePath + "//" + store.getImagePath();
+                File file1 = new File(path);
+                file1.delete();
+            }
             store.setImagePath(fileName);
             storesRepository.save(store);
         } catch (Exception e) {
