@@ -22,8 +22,8 @@ public class InventoryDetailService {
         this.inventoryDetailRepository = inventoryDetailRepository;
     }
 
-    public List<InventoryDTO> getAllItemsInventory() {
-        List<Map<String, Object>> inventorylist = inventoryDetailRepository.getItemsInventory();
+    public List<InventoryDTO> getAllItemsInventory(Long storeId) {
+        List<Map<String, Object>> inventorylist = inventoryDetailRepository.getItemsInventory(storeId);
         List<InventoryDTO> inventoryDTOList = new ArrayList<>();
 
         for (Map<String, Object> item : inventorylist) {

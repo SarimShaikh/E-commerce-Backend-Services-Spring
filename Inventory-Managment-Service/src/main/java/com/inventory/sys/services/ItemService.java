@@ -98,6 +98,8 @@ public class ItemService {
         Item item = itemRepository.findById(itemRequestDTO.getItemId()).
                 orElseThrow(() -> new ResourceNotFoundException("Item not found for this id :: " + itemRequestDTO.getItemId()));
 
+        Stores stores = storesRepository.findStoresByUserId(itemRequestDTO.getUserId());
+
         for (ItemDetailsDTO itemDetails : itemRequestDTO.getItemDetails()) {
             ItemDetails itemDetails1 = new ItemDetails();
             itemDetails1.setItemId(item.getItemId());
@@ -108,7 +110,7 @@ public class ItemService {
             itemDetails1.setIsActive((byte) 1);
             itemDetailsRepository.save(itemDetails1);
             itemDetailsRepository.flush();
-            inventoryDetailRepository.save(new InventoryDetail(item.getItemId(), itemDetails1.getItemDetailId(), (long) 0, (byte) 1));
+            inventoryDetailRepository.save(new InventoryDetail(stores.getStoreId(), item.getItemId(), itemDetails1.getItemDetailId(), (long) 0, (byte) 1));
         }
         customResponseDto.setResponseCode("200");
         customResponseDto.setMessage("Item Details added successfully");

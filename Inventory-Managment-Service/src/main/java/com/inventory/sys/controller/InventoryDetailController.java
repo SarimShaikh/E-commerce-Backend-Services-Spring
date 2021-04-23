@@ -22,10 +22,10 @@ public class InventoryDetailController {
         this.inventoryDetailService = inventoryDetailService;
     }
 
-    @GetMapping("/get-inventory")
+    @GetMapping("/get-inventory/{storeId}")
     @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
-    public List<InventoryDTO> getAllInventoryItems() {
-        return inventoryDetailService.getAllItemsInventory();
+    public List<InventoryDTO> getAllInventoryItems(@PathVariable(value = "storeId") Long storeId) {
+        return inventoryDetailService.getAllItemsInventory(storeId);
     }
 
     @PutMapping("/update-inventory")
