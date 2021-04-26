@@ -11,8 +11,10 @@ public class Order implements Serializable {
 
     private Long orderId;
     private Long userId;
+    private Long storeId;
     private String orderNumber;
     private Date createdDate;
+    private User user;
     private Collection<OrderDetails> orderDetails;
 
     @Id
@@ -37,6 +39,16 @@ public class Order implements Serializable {
     }
 
     @Basic
+    @Column(name = "STORE_ID", nullable = false)
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
+    @Basic
     @Column(name = "ORDER_NO", nullable = false)
     public String getOrderNumber() {
         return orderNumber;
@@ -55,6 +67,16 @@ public class Order implements Serializable {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

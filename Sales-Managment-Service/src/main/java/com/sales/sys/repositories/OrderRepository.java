@@ -13,6 +13,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     Page<Order> getAllByOrderNumber(String orderNum, Pageable pageable);
 
+    Page<Order> getAllByStoreIdOrUserIdOrderByOrderIdDesc(Long storeId , Long userId, Pageable pageable);
+
     @Override
     Page<Order> findAll(Pageable pageable);
 }

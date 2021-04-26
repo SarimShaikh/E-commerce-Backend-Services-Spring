@@ -23,7 +23,7 @@ public class OrderController {
 
     @PostMapping("/place-order")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public CustomResponseDto placeOrder(@RequestBody OrderDTO orderDTO)throws Exception{
+    public CustomResponseDto placeOrder(@RequestBody OrderDTO orderDTO) throws Exception {
         return orderService.placeOrder(orderDTO);
     }
 
@@ -33,5 +33,14 @@ public class OrderController {
                                            @RequestParam(defaultValue = "0") int page,
                                            @RequestParam(defaultValue = "10") int size) {
         return orderService.getAllOrders(orderNum, page, size);
+    }
+
+    @GetMapping("/get-store-orders")
+    @PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
+    public Map<String, Object> getAllStoreOrUserOrders(@RequestParam(name = "storeId") Long storeId,
+                                                       @RequestParam(required = false) Long userId,
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "10") int size) {
+        return orderService.getAllByStoreOrUserId(storeId, userId, page, size);
     }
 }

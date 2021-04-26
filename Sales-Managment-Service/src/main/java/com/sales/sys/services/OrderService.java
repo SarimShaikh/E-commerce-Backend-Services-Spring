@@ -49,6 +49,7 @@ public class OrderService {
         CustomResponseDto customResponseDto = new CustomResponseDto();
         Order order = new Order();
         order.setUserId(orderDTO.getUserId());
+        order.setStoreId(orderDTO.getStoreId());
         order.setOrderNumber(checkOrderNumber(UtilsClass.genRandomOrderNum()));
         order.setCreatedDate(new Date());
         final Order order1 = orderRepository.save(order);
@@ -71,6 +72,7 @@ public class OrderService {
                     rentalItems.setItemId(orderDetails.getItemId());
                     rentalItems.setItemDetailId(orderDetails.getItemDetailId());
                     rentalItems.setUserId(orderDTO.getUserId());
+                    rentalItems.setStoreId(orderDTO.getStoreId());
                     rentalItems.setOrderNumber(order1.getOrderNumber());
                     rentalItems.setFromDate(UtilsClass.convertDate(orderDetailDTO.getFromDate()));
                     rentalItems.setToDate(UtilsClass.convertDate(orderDetailDTO.getToDate()));
@@ -97,6 +99,18 @@ public class OrderService {
         Map<String, Object> response = new HashMap<>();
         Pageable paging = PageRequest.of(page, size);
         Page<Order> pageItem = orderNum != null ? orderRepository.getAllByOrderNumber(orderNum, paging) : orderRepository.findAll(paging);
+        List<Order> orders = pageItem.getContent();
+        response.put("orders", orders);
+        response.put("currentPage", pageItem.getNumber());
+        response.put("totalItems", pageItem.getTotalElements());
+        response.put("totalPages", pageItem.getTotalPages());
+        return response;
+    }
+
+    public Map<String, Object> getAllByStoreOrUserId(Long storeId, Long userId, int page, int size) {
+        Map<String, Object> response = new HashMap<>();
+        Pageable paging = PageRequest.of(page, size);
+        Page<Order> pageItem = orderRepository.getAllByStoreIdOrUserIdOrderByOrderIdDesc(storeId,userId,paging);
         List<Order> orders = pageItem.getContent();
         response.put("orders", orders);
         response.put("currentPage", pageItem.getNumber());

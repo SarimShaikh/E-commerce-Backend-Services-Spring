@@ -18,7 +18,7 @@ public class Item extends EntityBase<String> implements Serializable {
     private Long categoryId;
     private Long subCategoryId;
     private String itemName;
-    Collection<OrderDetails> orderDetails;
+    //Collection<OrderDetails> orderDetails;
     private Byte isActive;
 
     @Id
@@ -82,12 +82,12 @@ public class Item extends EntityBase<String> implements Serializable {
         this.isActive = isActive;
     }
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    /*@OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public Collection<OrderDetails> getOrderDetails() {
         return orderDetails;
     }
 
     public void setOrderDetails(Collection<OrderDetails> orderDetails) {
         this.orderDetails = orderDetails;
-    }
+    }*/
 }

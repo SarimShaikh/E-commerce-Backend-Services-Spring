@@ -19,7 +19,7 @@ public class OrderDetails implements Serializable {
     private Item item;
 
     //extra fields to get parent details
-    private String itemName;
+    //private String itemName;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -95,7 +95,6 @@ public class OrderDetails implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "ITEM_ID", nullable = false, insertable = false, updatable = false)
-    @JsonBackReference
     public Item getItem() {
         return item;
     }
@@ -104,12 +103,12 @@ public class OrderDetails implements Serializable {
         this.item = item;
     }
 
-    @org.springframework.data.annotation.Transient
+  /*  @org.springframework.data.annotation.Transient
     public String getItemName() {
         return itemName;
     }
 
     public void setItemName(String itemName) {
         this.itemName = item.getItemName();
-    }
+    }*/
 }

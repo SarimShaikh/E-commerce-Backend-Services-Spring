@@ -16,6 +16,7 @@ public class RentalItems extends EntityBase<String> implements Serializable {
     private Long itemId;
     private Long itemDetailId;
     private Long userId;
+    private Long storeId;
     private String orderNumber;
     private Date fromDate;
     private Date toDate;
@@ -63,6 +64,16 @@ public class RentalItems extends EntityBase<String> implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    @Basic
+    @Column(name = "STORE_ID", nullable = false)
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
     }
 
     @Basic
