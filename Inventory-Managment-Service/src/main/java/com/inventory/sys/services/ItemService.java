@@ -147,7 +147,7 @@ public class ItemService {
                 itemDetails.setItemPrice(itemDetailsDTO.getItemPrice());
                 itemDetails.setFineAmount(itemDetailsDTO.getFineAmount());
                 itemDetails.setRentalDays(itemDetailsDTO.getRentalDays());
-                itemDetails.setIsActive(itemDetailsDTO.getIsActive());
+                itemDetails.setIsActive((byte)1);
                 itemDetailsRepository.save(itemDetails);
             }
             customResponseDto.setResponseCode("200");
