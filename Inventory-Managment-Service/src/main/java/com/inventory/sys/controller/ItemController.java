@@ -120,7 +120,7 @@ public class ItemController {
     @GetMapping("/get-store-items")
     public Map<String, Object> getAllItemsWithStoreId(@RequestParam(name = "storeId") Long storeId,
                                                       @RequestParam(defaultValue = "0") int page,
-                                                      @RequestParam(defaultValue = "10") int size) {
+                                                      @RequestParam(defaultValue = "15") int size) {
         return itemService.getAllItemsBystoreId(storeId, page, size);
     }
 
