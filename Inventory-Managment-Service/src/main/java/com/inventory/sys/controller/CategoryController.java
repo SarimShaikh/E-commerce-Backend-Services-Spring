@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8087"})
@@ -59,5 +61,12 @@ public class CategoryController {
     //@PreAuthorize("hasRole('SUB_ADMIN') or hasRole('ADMIN')")
     public List<Category> getAllCategories(){
         return categoryService.getAllCategories();
+    }
+
+    @GetMapping("/get-mob-categories")
+    public Map<String,Object> getAllCategoriesForMobile(){
+        Map<String,Object> categoriesMap = new HashMap<>();
+        categoriesMap.put("categories",categoryService.getAllCategories());
+        return categoriesMap;
     }
 }
