@@ -34,9 +34,9 @@ public class RentalItemsController {
         return rentalItemsService.getAllRentedItemsOrWithUserId(userId);
     }
 
-    @GetMapping("/store-rental-items/{storeId}")
+    @GetMapping("/store-rental-items")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<RentalReturnItemsDTO> getAllItemsInventoryWithStoreId(@PathVariable(value = "storeId") Long storeId) {
+    public List<RentalReturnItemsDTO> getAllItemsInventoryWithStoreId(@RequestParam(name = "storeId") Long storeId) {
         return rentalItemsService.getAllRentedItemsWithStoreId(storeId);
     }
 
