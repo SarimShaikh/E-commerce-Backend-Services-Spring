@@ -21,6 +21,17 @@ public class ReturnItemsService {
 
     public List<RentalReturnItemsDTO> getAllReturnItems() {
         List<Map<String, Object>> rentItemsList = returnItemsRepository.getAllReturnItems();
+        List<RentalReturnItemsDTO> rentalItemsList = getRentalReturnItemsDTOS(rentItemsList);
+        return rentalItemsList;
+    }
+
+    public List<RentalReturnItemsDTO> getAllReturnItemsWithStoreId(Long storeId) {
+        List<Map<String, Object>> rentItemsList = returnItemsRepository.getAllReturnItemsWithStoreId(storeId);
+        List<RentalReturnItemsDTO> rentalItemsList = getRentalReturnItemsDTOS(rentItemsList);
+        return rentalItemsList;
+    }
+
+    private List<RentalReturnItemsDTO> getRentalReturnItemsDTOS(List<Map<String, Object>> rentItemsList) {
         List<RentalReturnItemsDTO> rentalItemsList = new ArrayList<>();
         for (Map<String, Object> item : rentItemsList) {
             RentalReturnItemsDTO rentalReturnItemsDTO = new RentalReturnItemsDTO();
