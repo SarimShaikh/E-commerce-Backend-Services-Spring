@@ -17,11 +17,17 @@ public interface RentalItemsRepository extends JpaRepository<RentalItems, Long> 
             "ON(detail.ITEM_DETAIL_ID = rent_item.ITEM_DETAIL_ID)", nativeQuery = true)
     List<Map<String, Object>> getAllRentalItems();
 
-    @Query(value = "SELECT item.ITEM_NAME itemName, detail.ITEM_SIZE itemSize, detail.ITEM_PRICE itemPrice, rent_item.ORDER_NO orderNumber, rent_item.PENALTY_AMOUNT penaltyAmount,\n" +
+    @Query(value = "SELECT rent_item.RENTAL_ID rentalId, item.ITEM_NAME itemName, detail.ITEM_SIZE itemSize, detail.ITEM_PRICE itemPrice, rent_item.ORDER_NO orderNumber, rent_item.PENALTY_AMOUNT penaltyAmount,\n" +
             "rent_item.FROM_DATE fromDate, rent_item.TO_DATE toDate, rent_item.QUANTITY quantity, rent_item.STATUS STATUS, rent_item.CREATED_DATE orderDate \n" +
             "FROM items item JOIN items_detail detail ON(item.ITEM_ID = detail.ITEM_ID) JOIN rental_items rent_item\n" +
             "ON(detail.ITEM_DETAIL_ID = rent_item.ITEM_DETAIL_ID) WHERE rent_item.USER_ID = ?1", nativeQuery = true)
     List<Map<String, Object>> getRentalItemsWithUserId(Long userId);
+
+    @Query(value = "SELECT rent_item.RENTAL_ID rentalId, item.ITEM_NAME itemName, detail.ITEM_SIZE itemSize, detail.ITEM_PRICE itemPrice, rent_item.ORDER_NO orderNumber, rent_item.PENALTY_AMOUNT penaltyAmount,\n" +
+            "rent_item.FROM_DATE fromDate, rent_item.TO_DATE toDate, rent_item.QUANTITY quantity, rent_item.STATUS STATUS, rent_item.CREATED_DATE orderDate \n" +
+            "FROM items item JOIN items_detail detail ON(item.ITEM_ID = detail.ITEM_ID) JOIN rental_items rent_item\n" +
+            "ON(detail.ITEM_DETAIL_ID = rent_item.ITEM_DETAIL_ID) WHERE rent_item.STORE_ID = ?1", nativeQuery = true)
+    List<Map<String, Object>> getRentalItemsWithStoreId(Long storeId);
 
 
 }

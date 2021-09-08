@@ -25,13 +25,19 @@ public class RentalItemsController {
     @GetMapping("/rental-items")
     @PreAuthorize("hasRole('ADMIN')")
     public List<RentalReturnItemsDTO> getAllItemsInventory() {
-        return rentalItemsService.getAllRentedItems();
+        return rentalItemsService.getAllRentedItemsOrWithUserId(null);
     }
 
     @GetMapping("/user-rental-items/{userId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<RentalReturnItemsDTO> getAllItemsInventoryWithUserId(@PathVariable(value = "userId") Long userId) {
-        return rentalItemsService.getAllRentedItemsWithUserId(userId);
+        return rentalItemsService.getAllRentedItemsOrWithUserId(userId);
+    }
+
+    @GetMapping("/store-rental-items/{storeId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<RentalReturnItemsDTO> getAllItemsInventoryWithStoreId(@PathVariable(value = "storeId") Long storeId) {
+        return rentalItemsService.getAllRentedItemsWithStoreId(storeId);
     }
 
     @DeleteMapping("/delete-rental-item/{rentalId}")
