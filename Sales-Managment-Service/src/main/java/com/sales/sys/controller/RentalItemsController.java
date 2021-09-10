@@ -29,7 +29,7 @@ public class RentalItemsController {
     }
 
     @GetMapping("/user-rental-items/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public List<RentalReturnItemsDTO> getAllItemsInventoryWithUserId(@PathVariable(value = "userId") Long userId) {
         return rentalItemsService.getAllRentedItemsOrWithUserId(userId);
     }
